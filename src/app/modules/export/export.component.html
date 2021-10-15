@@ -1,0 +1,55 @@
+<div class="card border-light mb-3" style="max-width:100%;">
+    <div class="card-body" style="padding-left: 50px; padding-right: 50px;">
+      <div class="container-fluid">
+        <br>
+        <div class="container">
+          <div class="row">
+            <div class="card border-light mb-3" style="max-width: 100%; text-align: center;">
+              <div class="card-header"><h4 class="card-title">Exportar Contratos a Excel</h4></div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-md-12">
+            <table class="table table-hover" datatable [dtOptions]="dtOptions"  [dtTrigger]="dtTrigger"  aria-label="...">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">No.</th>
+                    <th scope="col">EXACT</th>
+                    <th scope="col">Sucursal</th>
+                    <th scope="col">Proveedor/Cliente</th>
+                    <th scope="col">Fecha firma</th>
+                    <th scope="col">Vigencia</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-light" *ngFor="let item of contracts; let i = index">
+                    <th scope="row"><input class="form-check-input" type="checkbox" value="check" 
+                        (change)='checkOnClick(item,i)' aria-label="..."></th>
+                    <td>{{i+1}}</td>
+                    <td>{{item.exactNumber}}</td>
+                    <td>{{item.supplierClient}}</td>
+                    <td>{{item.sucursal}}</td>
+                    <td>{{item.signatureDate}}</td>
+                    <td>{{item.effect}}</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm"
+                        style="margin-right: 10px;" (click)="exportToExcel(item)">Exportar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row"  style="text-align: center;">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-outline-primary" (click)="exportSelectedToExcel()">Exportar Seleccionados</button>
+        </div>
+    </div>
+  </div>

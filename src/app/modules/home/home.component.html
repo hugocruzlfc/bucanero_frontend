@@ -1,0 +1,112 @@
+<body>
+  <div class="container-fluid">
+      <br>
+      <div class="row">
+          <div class="col-md-2" ><img src="assets/images/iconSoft.png" style="height: 100px; width: 140px; margin-left: 50px;"> </div>
+          <div class="col-md-6 align-self-center" style="margin-top: 10px;padding-left: 100px;">
+              
+              <notification></notification>
+          </div>
+          <div class="col-md-4 ml-auto" style="padding-left: 10px;">
+            
+              <!-- <div class="nav navbar justify-content-end">  -->
+                  <div class="d-flex align-items-center" 
+                  role="button" aria-expanded="false"> 
+                  <i class="fa fa-user-circle fa-3x"  style="margin: 7px;"></i>
+                      <span style="font-size: 20px;">{{userName}}</span>
+                      <button type="button" class="btn btn-outline-success btn-sm" style="margin-left: 40px;" 
+                      (click)="logout()">Cerrar Sesión</button>
+                  </div> 
+           <!-- </div> -->
+        </div>
+      </div>
+      <div class="row">
+         <div class="col-md-2" >
+              <div class="myBar"  [ngClass]="{'myBarSelected': ruta == 'crearContrato'}" 
+              type="button" routerLink="contract" (click)="changeMenu(1)">
+              <a><i class="fa fa-file faIcons"></i></a>Crear Contrato</div>
+
+              <div class="myBar"  [ngClass]="{'myBarSelected': ruta == 'verContrato'}" 
+              type="button" routerLink="see-contract" (click)="changeMenu(2)"><a>
+                  <i class="fa fa-list-ol faIcons" ></i></a>Ver Contratos</div>
+
+              <div class="myBar"  [ngClass]="{'myBarSelected': ruta == 'adjuntarContrato'}" 
+              type="button" routerLink="atached" (click)="changeMenu(3)"><a>
+                  <i class="fa fa-file-image faIcons" ></i></a>Adjuntar Contrato</div>
+
+              
+              <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'exportToExcel'}" 
+              type="button" routerLink="export" (click)="changeMenu(4)"><a>
+                  <i class="fa fa-file-excel faIcons" ></i></a>Exportar a Excel</div>
+                  <ng-container *ngIf="isAdmin">
+                    <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'admin'}" 
+                    type="button" routerLink="admin" (click)="changeMenu(5)"><a>
+                        <i class="fa fa-cog faIcons" ></i></a>Administrar</div>
+                  </ng-container>
+                  
+              <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'help'}"
+              type="button" routerLink="help" (click)="changeMenu(6)"><a>
+                  <i class="fa fa-question faIcons"></i></a>Ayuda</div>
+
+              <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'aboutUs'}"
+              type="button" routerLink="about-us" (click)="changeMenu(7)"><a>
+                  <i class="fa fa-info faIcons"></i></a>Sobre nosotros</div>
+          
+          </div>
+         <div class="col-md-10" style="margin-left: 0px; margin-right:auto;">
+             
+              <!-- <br> -->
+             <!-- <div class="container"> -->
+                <div class="container">
+                    <div class="card border-primary" style="max-width: 100%;">
+                        <router-outlet></router-outlet>
+                    </div>
+                </div>
+               
+             <!-- </div> -->
+         </div>
+      </div>
+      
+  </div>
+  </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <header>
+    <top-bar></top-bar>
+ </header>
+ <br>
+ <br>
+ <br>
+<body style="padding-top: 20px;">
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <router-outlet></router-outlet>
+          </div>      
+        </div> 
+      </div>
+</body>
+<footer>
+    footer
+</footer> -->
+
+
+
+      

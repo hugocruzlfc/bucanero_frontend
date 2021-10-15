@@ -1,0 +1,38 @@
+// .card{
+//     background-image: url("../../../assets/images/forCard.png");
+//     filter: brightness(100%);
+//      background-size: cover;
+//     background-repeat: no-repeat;
+//     overflow: hidden;
+//     height: 100%; 
+//     //background-color: transparent;
+// } 
+
+.divPicture{
+    border-radius: 20px;
+    width: 100%; 
+    //overflow: hidden;
+    height: auto;
+    object-fit: contain;
+    height: 100%;
+  }
+
+  
+  .divPicture img{
+    width: 90%;
+    height: auto;
+  }
+    @supports(object-fit: cover){
+        .divPicture img{
+          height: 100%;
+          object-fit: cover;
+          object-position: center center;
+        }
+    }
+
+    img{
+        border-radius: 10px;
+    }
+   a{
+       color:rgb(14, 127, 131); 
+   } 

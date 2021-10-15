@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootswatch/dist/simplex/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/simplex/bootswatch";
+
+body{
+    color: rgb(14, 127, 131);
+    margin: 0; font-family: 'Roboto', sans-serif; 
+}
+
+.btn{
+    border-radius: 30px;
+    }
+
+.btn-outline-primary{
+    color:rgb(14, 127, 131); ;
+}
+
+label,option {
+    color: rgb(14, 127, 131)
+}

@@ -1,0 +1,140 @@
+
+<div class="card border-light mb-3" style="max-width:100%;">
+    <div class="card-body" style="padding-left: 50px; padding-right: 50px;">
+      <div class="container-fluid">
+        <br>
+        <div class="container">
+          <div class="row">
+            <div class="card border-light mb-3" style="max-width: 100%; text-align: center;">
+              <div class="card-header"><h4 class="card-title">Contratos Creados</h4></div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-md-12">
+            <table class="table table-hover" aria-describedby="Tabla de contratos"
+             datatable [dtOptions]="dtOptions"  [dtTrigger]="dtTrigger" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">EXACT</th>
+                    <th scope="col">Contrato/Suplemento</th>
+                    <th scope="col">Proveedor/Cliente</th>
+                    <th scope="col">Foto Adjunta</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-light" *ngFor="let item of contracts; let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{item.exactNumber}}</td>
+                    <td>{{item.supplementContract}}</td>
+                    <td>{{item.sucursal}}</td>
+                    <td>{{item.contractAttached | ifAtached:item.contractAttached}}</td>
+                    <td>
+                        <button type="button" class="btn btn-dark btn-sm"  data-bs-target="#modalUsers" data-bs-toggle="modal"
+                        style="margin-right: 10px;" (click)=" modalMode(item)">Adjuntar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- modal Adjuntar foto de contrato escaneado -->
+    <div class="modal"  id="modalUsers">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document"  >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" 
+              >{{modalTitle}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="card border-light mb-3" style="max-width: 100%">
+                
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <!-- <form [formGroup]="contractForm" >
+                        <fieldset>
+
+                          <div >
+                            <img [src]="linkImg()">
+                        </div>
+        
+                        </fieldset> -->
+                       <div class="row"> 
+                         <div class="col-md-6">
+                          <div class="list-group-item">
+                            <div class="text-center d-flex align-items-center justify-content-center" 
+                            (click)="selectFotoToContract()" style="cursor: pointer;"
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="Seleccione la imagen">
+                                      <img [src]="imageSrc" class="text-center" style="height: auto;width: 70%;" />
+                                          </div>
+                                  <input type="file" accept="image/*" id="fileUpload" name="fileUpload" style="display: none;">
+                          </div>
+                       </div>
+                       <div class="col-md-6">
+                        <p>Elija la imagen de el contrato escaneado. Dicha imagen se guardará en la Base de Datos y podrá ser 
+                          <strong>usada o modificada</strong> siempre que lo desee.</p>
+                          <p>Recomendamos usar los formatos <strong>".jpg"</strong> o <strong>".PNG"</strong>.</p>
+                       </div>
+                       
+                       </div>
+
+                        <div class="form-group">
+                          <div class="row" style="margin-top: 20px;">
+                              <div class="col-md-12" style="text-align: right;">
+                            <button  type="button" 
+                                class="btn btn-light"  printSectionId = "print-section" ngxPrint>
+                                <i class="fa fa-print fa-2x" 
+                                style="cursor: pointer; margin-left: 10px;" 
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Imprimir Contrtato"
+                                ></i>
+                            </button >
+                                <button  class="btn btn-success" id="buttonSumit" data-bs-dismiss="modal" 
+                                type="button" [disabled]="!fotoSelected" (click)="atachedContract()">Adjuntar
+                            </button>
+                                  <button type="button" class="btn btn-dark" 
+                                  style="margin-left: 5px;" data-bs-dismiss="modal">Cancelar</button>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+        <!-- Plantilla para imprimir el Contrato -->
+
+  <div  id = "print-section">  
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row" style="text-align: center;">
+            <h2>Contrato</h2>
+          </div>
+          <div class="row">
+            <p>
+            </p>
+          </div>
+          <div class="row">
+            <p></p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div >

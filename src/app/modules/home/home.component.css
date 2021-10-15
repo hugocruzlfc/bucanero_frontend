@@ -1,0 +1,71 @@
+/* .container-fluid{
+    background-image: url("../../../assets/images/fondo.JPG");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%; 
+} */
+
+.btn-outline-success{
+border-color: rgb(14, 127, 131); 
+color: rgb(14, 127, 131); 
+}
+
+.btn-outline-success:hover{
+    color: white;
+    background-color:rgb(14, 127, 131); 
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+    height: 600px;
+  }
+
+  .myBar{
+    border-radius: 30px;
+    width:100%;
+    margin-top: 30px;
+    height: 35px;
+    margin-left: 30px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    
+}
+
+.myBar:hover{
+    color: white;
+    background-color:rgb(14, 127, 131); 
+}
+
+
+.myBarSelected{
+    border-radius: 30px;
+    width:100%;
+    margin-top: 30px;
+    height: 35px;
+    margin-left: 30px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    color: white;
+    background-color:rgb(14, 127, 131);
+}
+
+.faIcons{
+    margin-left: 10px;
+    margin-right: 10px; 
+    margin-top: 7px; 
+    margin-bottom: 7px;
+}
+
+.myBar:focus{
+    color: white;
+    background-color:rgb(14, 127, 131); 
+}
+.myBar:any-link{
+    color: white;
+    background-color:rgb(14, 127, 131);
+}

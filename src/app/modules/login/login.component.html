@@ -1,0 +1,83 @@
+<div class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6" style="margin-left: 70px;">
+             <div class="container">
+                <br>
+                <br>
+                <div class="card border-primary mb-4" style="max-width: 30rem;">
+                    <div class="card-body">
+                <div class="row">
+                    
+                    <div class="col-md-12" style="text-align: center;">
+                        <img src="assets/images/iconPage.png" style="height: 150px;width: 150px;">
+                    </div>
+                </div>
+            <br>
+                <div class="row justify-content-center">
+                    <div class="col-md-12" style="padding-left: 30px; padding-right: 30px;">
+                        <form (ngSubmit)="onLogin()" [formGroup]="loginForm" id="formAuth">
+                            <fieldset>
+                              <div class="form-group">
+                                <label for="email" class="form-label mt-4" style="color: red;"></label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                placeholder="Email: usuario@dominio.cu"
+                                formControlName="email"
+                                aria-describedby="emailHelp" autocomplete="off">
+                                <div class="colorMessageErrors text-center" *ngIf="isValidField('email') " >
+                                    {{getErrorMessage("email")}}
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label for="password" class="form-label mt-4" style="color: red;"></label>
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                <input 
+                                [type]="hide ?'password' :'text'" 
+                                class="form-control" id="password"
+                                name="password"  placeholder="Clave: ******"
+                                    formControlName="password">
+                                    <ng-container *ngIf="hide==true"><span class="fa fa-eye-slash errspan" style="cursor: pointer;" 
+                                        (click)="hide =!hide"></span></ng-container>
+                                    <ng-container *ngIf="hide==false">
+                                        <span class="fa fa-eye errspan" style="cursor: pointer;" (click)="hide =!hide"></span>
+                                    </ng-container>
+                                   
+                                   
+                                    <div class="colorMessageErrors text-center" *ngIf="isValidField('password') " >
+                                        {{getErrorMessage("password")}}
+                                    </div>  
+                              </div>
+                            </fieldset>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12" style="text-align: center; cursor: pointer;" type="buttom">
+                                    <a><h6 style="color: red; background-color: white;margin-left: 80px;
+                                    margin-right: 80px;border-radius: 3px;">{{mensaje}}</h6></a>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align: right;">
+                                        <button  class="btn btn-primary" id="buttonSumit"
+                                            type="submit" [disabled]="!loginForm.valid">Entrar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                          </form>
+                    </div>
+                </div>
+            </div>
+             </div>
+            </div>
+        </div>
+ 
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+ </div>
+
+ 

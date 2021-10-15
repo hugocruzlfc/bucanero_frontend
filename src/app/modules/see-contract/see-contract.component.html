@@ -1,0 +1,449 @@
+
+<div class="card border-light mb-3" style="max-width:100%;">
+    <div class="card-body" style="padding-left: 50px; padding-right: 50px;">
+      <div class="container-fluid">
+        <br>
+        <div class="container">
+          <div class="row">
+            <div class="card border-light mb-3" style="max-width: 100%; text-align: center;">
+              <div class="card-header"><h4 class="card-title">Contratos Creados</h4></div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-md-12">
+            <table class="table table-hover" datatable [dtOptions]="dtOptions"  [dtTrigger]="dtTrigger" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">EXACT</th>
+                    <th scope="col">Sucursal</th>
+                    <th scope="col">Proveedor/Cliente</th>
+                    <th scope="col">Fecha firma</th>
+                    <th scope="col">Vigencia</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-light" *ngFor="let item of contracts; let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{item.exactNumber}}</td>
+                    <td>{{item.supplierClient}}</td>
+                    <td>{{item.sucursal}}</td>
+                    <td>{{item.signatureDate}}</td>
+                    <td>{{item.effect}}</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm"  data-bs-target="#modalUsers" data-bs-toggle="modal"
+                        style="margin-right: 10px;" (click)=" modalMode(1, item)">Detalles</button>
+                        <button type="button" class="btn btn-success btn-sm"  data-bs-target="#modalUsers" data-bs-toggle="modal"
+                        (click)=" modalMode(2, item)" style="margin-right: 10px;">Editar</button>
+                        <button type="button" class="btn btn-primary btn-sm"  (click)="deleteContract(item)">Eliminar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row"  style="text-align: center;">
+        <div class="col-md-12">
+            <i class="fa fa-arrow-left fa-2x"  style="cursor: pointer; text-align: center;" (click)="backClicked()"
+            data-bs-toggle="tooltip" data-bs-placement="right" title="Volver"></i>
+        </div>
+    </div> -->
+  </div>
+
+
+    <!-- modal Añadir, Detalles y Editar -->
+    <div class="modal"  id="modalUsers">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document"  >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" 
+              [ngClass]="{'text-primary': modalTitle=='Añadir Usuario','text-info': modalTitle=='Detalles del Usuario', 'text-success': modalTitle=='Editar Usuario' }"
+              >{{modalTitle}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="card border-light mb-3" style="max-width: 100%">
+                
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <form [formGroup]="contractForm" >
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-md-4"> 
+                                    <div class="form-floating">
+                                    <ng-container *ngIf="actionMode ==1">
+                                    <input type="text" class="form-control" id="exactNumber"
+                                     name="exactNumber"  readonly=""
+                                    placeholder="SHA-1"
+                                    formControlName="exactNumber">
+                                  <label for="exactNumber" >Número de EXACT</label>
+                               
+                              </ng-container>
+                                    <ng-container *ngIf="actionMode ==2">
+                                    <input type="text" class="form-control" id="exactNumber"
+                                     name="exactNumber" 
+                                    placeholder="SHA-1"
+                                    formControlName="exactNumber">
+                                  <label for="exactNumber" >Número de EXACT</label>
+                              </ng-container>
+                              </div>
+                              </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <ng-container *ngIf="actionMode ==1">
+                                            <input type="text" class="form-control" id="sucursal" 
+                                            name="sucursal" readonly=""
+                                            placeholder="Fecha de firma"
+                                            formControlName="sucursal">
+                                            <label for="sucursal" >Sucursal</label>
+                                        </ng-container>
+                                        <ng-container *ngIf="actionMode ==2">
+                                            <input type="text" class="form-control" id="sucursal" 
+                                            name="sucursal" 
+                                            placeholder="Fecha de firma"
+                                            formControlName="sucursal">
+                                            <label for="sucursal" >Sucursal</label>
+                                        </ng-container>
+                                      </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <ng-container *ngIf="actionMode ==1">
+                                        <input type="date" class="form-control" id="signatureDate" 
+                                        name="signatureDate"  readonly=""
+                                        placeholder="Fecha de firma"
+                                        formControlName="signatureDate" autocomplete="off">
+                                        <label for="signatureDate" >Fecha de firma</label>
+                                        </ng-container>
+                                        <ng-container *ngIf="actionMode ==2">
+                                        <input type="date" class="form-control" id="signatureDate" 
+                                        name="signatureDate" 
+                                        placeholder="Fecha de firma"
+                                        formControlName="signatureDate" autocomplete="off">
+                                        <label for="signatureDate" >Fecha de firma</label>
+                                        </ng-container>
+                                      </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                  <ng-container *ngIf="actionMode ==1">
+                                  <input type="text" class="form-control" id="supplierClient" name="supplierClient" 
+                                  formControlName="supplierClient"   readonly="" placeholder="Proveedor/Cliente">
+                                  <label for="supplierClient">Proveedor/Cliente</label>
+                                </ng-container>
+                                  <ng-container *ngIf="actionMode ==2">
+                                  <input type="text" class="form-control" id="supplierClient" name="supplierClient" 
+                                  formControlName="supplierClient"  placeholder="Proveedor/Cliente">
+                                  <label for="supplierClient">Proveedor/Cliente</label>
+                                </ng-container>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                  <ng-container *ngIf="actionMode ==1">
+                                  <input type="text" class="form-control" id="aplicantArea" 
+                                  name="aplicantArea"  readonly=""
+                                  placeholder="55555555"
+                                  formControlName="aplicantArea" autocomplete="off">
+                                  <label for="aplicantArea">Área rectora/solicitante  </label>
+                                </ng-container>
+                                  <ng-container *ngIf="actionMode ==2">
+                                  <input type="text" class="form-control" id="aplicantArea" 
+                                  name="aplicantArea"  
+                                  placeholder="55555555"
+                                  formControlName="aplicantArea" autocomplete="off">
+                                  <label for="aplicantArea">Área rectora/solicitante  </label>
+                                </ng-container>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <ng-container *ngIf="actionMode ==1">
+                                  <div class="form-floating" style="margin-top: 10px;">
+                                    <input  type="text" class="form-control" id="supplementContract" name="supplementContract" 
+                                    formControlName="supplementContract"  readonly="">
+                                  <label for="supplementContract" >Tipo de contrato o suplemento</label>
+                              </div>
+                            </ng-container>
+                                <ng-container *ngIf="actionMode ==2">
+                                <div class="form-control" style="margin-top: 10px;">
+                                  <label for="supplementContract" >Tipo de contrato o suplemento</label>
+                                <select   class="form-select" id="supplementContract" name="supplementContract" 
+                                formControlName="supplementContract">
+                                  <option  value="">--Seleccione--</option>
+                                  <option value="Contrato de servicios">Contrato de servicios</option>
+                                  <option value="Contrato de compra ventas">Contrato de compra ventas</option>
+                                  <option value="Contrato de suministros">Contrato de suministros</option>
+                                  <option value="Suplemento de servicios">Suplemento de servicios</option>
+                                  <option value="Suplemento de compra ventas">Suplemento de compra ventas</option>
+                                  <option value="Suplemento de suministros">Suplemento de compra ventas</option>
+                                  <option value="">Otros</option>
+                                </select>
+                              </div>
+                            </ng-container>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                  <ng-container *ngIf="actionMode ==1">
+                                  <input type="text" class="form-control" id="object" name="object" 
+                                  placeholder="objeto" readonly=""
+                                  formControlName="object"  autocomplete="off">
+                                  <label for="object" >Objeto</label>
+                                </ng-container>
+                                  <ng-container *ngIf="actionMode ==2">
+                                  <input type="text" class="form-control" id="object" name="object" 
+                                  placeholder="objeto" 
+                                  formControlName="object"  autocomplete="off">
+                                  <label for="object" >Objeto</label>
+                                </ng-container>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                  <ng-container *ngIf="actionMode ==1">
+                                  <input type="text" class="form-control" id="processor" name="processor" 
+                                  placeholder="tramitador"   readonly=""
+                                  formControlName="processor"  autocomplete="off">
+                                  <label for="processor" >Tramitador</label>
+                                </ng-container>
+                                  <ng-container *ngIf="actionMode ==2">
+                                  <input type="text" class="form-control" id="processor" name="processor" 
+                                  placeholder="tramitador" 
+                                  formControlName="processor"  autocomplete="off">
+                                  <label for="processor" >Tramitador</label>
+                                </ng-container>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                  <ng-container *ngIf="actionMode ==1">
+                                  <input type="date" class="form-control" id="effect"
+                                  name="effect"  placeholder="Vigencia" readonly=""
+                                      formControlName="effect">
+                                      <label for="effect" >Vigencia</label>
+                                    </ng-container>
+                                  <ng-container *ngIf="actionMode ==2">
+                                  <input type="date" class="form-control" id="effect"
+                                  name="effect"  placeholder="Vigencia" 
+                                      formControlName="effect">
+                                      <label for="effect" >Vigencia</label>
+                                    </ng-container>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-3">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                  <ng-container *ngIf="actionMode ==1">
+                                  <input type="text" class="form-control" id="wayToPay" name="wayToPay" 
+                                  placeholder="Forma de pago" readonly=""
+                                  formControlName="wayToPay"  autocomplete="off">
+                                  <label for="wayToPay" >Forma de pago</label>
+                                  </ng-container>
+                                  <ng-container *ngIf="actionMode ==2">
+                                  <input type="text" class="form-control" id="wayToPay" name="wayToPay" 
+                                  placeholder="Forma de pago" 
+                                  formControlName="wayToPay"  autocomplete="off">
+                                  <label for="wayToPay" >Forma de pago</label>
+                                  </ng-container>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                  <ng-container *ngIf="actionMode ==1">
+                                  <input type="text" class="form-control" id="termToPay" name="termToPay" 
+                                  placeholder="Termino de pago" readonly=""
+                                  formControlName="termToPay">
+                                  <label for="termToPay" >Termino de pago</label>
+                                </ng-container>
+                                  <ng-container *ngIf="actionMode ==2">
+                                  <input type="text" class="form-control" id="termToPay" name="termToPay" 
+                                  placeholder="Termino de pago" 
+                                  formControlName="termToPay">
+                                  <label for="termToPay" >Termino de pago</label>
+                                </ng-container>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                  <ng-container *ngIf="actionMode ==1">
+                                  <input type="text" class="form-control" id="currencyPay" name="currencyPay" 
+                                  placeholder="Moneda de pago" readonly=""
+                                  formControlName="currencyPay" >
+                                  <label for="termToPay" >Moneda de pago</label>
+                                </ng-container>
+                                  <ng-container *ngIf="actionMode ==2">
+                                  <input type="text" class="form-control" id="currencyPay" name="currencyPay" 
+                                  placeholder="Moneda de pago" 
+                                  formControlName="currencyPay" >
+                                  <label for="termToPay" >Moneda de pago</label>
+                                </ng-container>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                  <ng-container *ngIf="actionMode ==1">
+                                  <input type="number" class="form-control" id="totalValue"
+                                  name="totalValue"  placeholder="Valor total" readonly=""
+                                      formControlName="totalValue">
+                                      <label for="totalValue" >Valor total</label>
+                                  </ng-container>
+                                  <ng-container *ngIf="actionMode ==2">
+                                  <input type="number" class="form-control" id="totalValue"
+                                  name="totalValue"  placeholder="Valor total" 
+                                      formControlName="totalValue">
+                                      <label for="totalValue" >Valor total</label>
+                                  </ng-container>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-4">
+                                <ng-container *ngIf="actionMode ==1">
+                                <div class="form-floating" style="margin-top: 10px;">
+                                
+                                  <input type="text" class="form-control" id="nationalInternational"
+                                  name="nationalInternational"  placeholder="Valor total" readonly=""
+                                      formControlName="nationalInternational">
+                                      <label for="totalValue" >Pago</label>
+                                 
+                                </div>
+                              </ng-container>
+                                 <ng-container *ngIf="actionMode ==2">
+                                   <legend class="mt-4">Pago</legend>
+                                   <div class="form-check form-check-inline">
+                                     <label class="form-check-label">
+                                       <input type="radio" class="form-check-input" name="nationalInternational"
+                                       id="nationalInternational" value=Nacional formControlName="nationalInternational">
+                                       Nacional
+                                     </label>
+                                   </div>
+                                   <div class="form-check form-check-inline">
+                                     <label class="form-check-label">
+                                       <input type="radio" class="form-check-input" name="nationalInternational"
+                                       id="nationalInternational" value=Internacional formControlName="nationalInternational">
+                                       Internacional
+                                     </label>
+                                   </div>
+                                  </ng-container>
+                               </div>
+                               <div class="col-md-2">
+                                <ng-container *ngIf="actionMode ==1">
+                                  <div class="form-floating" style="margin-top: 10px;">
+                                  
+                                    <input type="text" class="form-control" id="exportation"
+                                    name="exportation"  placeholder="exportation" readonly=""
+                                        formControlName="exportation">
+                                        <label for="totalValue" >Exportación</label>
+                                   
+                                  </div>
+                                </ng-container>
+                                <ng-container *ngIf="actionMode ==2">
+                                <legend class="mt-4">Exportación</legend>
+                                <div class="form-check form-check-inline">
+                                  <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="exportation" 
+                                    id="exportation" value="Si" formControlName="exportation">
+                                    Si
+                                  </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="exportation" 
+                                    id="exportation" value="No" formControlName="exportation">
+                                    No
+                                  </label>
+                                </div>
+                                </ng-container>
+                              </div>
+                              <div class="col-md-6">
+                                <ng-container *ngIf="actionMode ==1">
+                                  <div class="form-floating" style="margin-top: 10px;">
+                                  
+                                    <input type="text" class="form-control" id="observations"
+                                    name="observations"  placeholder="observations" readonly=""
+                                        formControlName="observations">
+                                        <label for="totalValue" >Observaciones</label>
+                                   
+                                  </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="actionMode ==2">
+                                <div class="form-group">
+                                  <label for="observations" class="form-label mt-4">Observaciones</label>
+                                  <textarea class="form-control" id="observations" name="observations" rows="3" 
+                                  formControlName="observations"></textarea>
+                                </div>
+                                </ng-container>
+                              </div>
+                            </div>
+        
+                        </fieldset>
+                        <div class="form-group">
+                          <div class="row" style="margin-top: 20px;">
+                              <div class="col-md-12" style="text-align: right;">
+                               <ng-container *ngIf="actionMode==1">
+                            <button  type="button" 
+                                class="btn btn-light"  printSectionId = "print-section" ngxPrint>
+                                <i class="fa fa-print fa-2x" 
+                                style="cursor: pointer; margin-left: 10px;" 
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Imprimir Contrtato"
+                                ></i>
+                            </button >
+                               </ng-container>
+                               <ng-container *ngIf="actionMode==2">
+                                <button  class="btn btn-success" id="buttonSumit" data-bs-dismiss="modal" 
+                                (click)="editContract()"
+                                type="button" [disabled]="!contractForm.valid">Editar
+                            </button>
+                               </ng-container>
+                                  <button type="button" class="btn btn-dark" 
+                                  style="margin-left: 5px;" data-bs-dismiss="modal">Cancelar</button>
+                              </div>
+                          </div>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                  
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+        <!-- Plantilla para imprimir el Contrato -->
+
+  <div  id = "print-section">  
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row" style="text-align: center;">
+            <h2>Contrato</h2>
+          </div>
+          <div class="row">
+            <p>
+            </p>
+          </div>
+          <div class="row">
+            <p></p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div >

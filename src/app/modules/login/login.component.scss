@@ -1,0 +1,27 @@
+.card{
+    box-shadow: 0px 0px 12px rgba(238, 20, 20, 0.15);
+    background-color:transparent;
+}
+
+.container-fluid{
+    background-image: url("../../../assets/images/fondo.JPG");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%; 
+}
+
+.colorMessageErrors{
+    margin-top: 5px;
+    color : rgb(13, 13, 14);
+    background-color:wheat;
+    border-radius: 10px;
+ }
+
+ .errspan {
+    float: right;
+    margin-right: 20px;
+    margin-top: -25px;
+    position: relative;
+    color: black;
+    z-index: 2;
+}
