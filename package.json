@@ -24,6 +24,7 @@
     "bootstrap": "^5.0.1",
     "bootswatch": "^5.0.1",
     "datatables.net": "^1.10.25",
+    "datatables.net-bs5": "^1.11.3",
     "datatables.net-dt": "^1.1.0",
     "file-saver": "^2.0.5",
     "jquery": "^3.6.0",
