@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; 
+import {  Router } from '@angular/router';
 
 import { Contract } from './../shared/interfaces/contract.interface';
 import { ContractsService } from './services/contracts.service';
@@ -15,7 +16,8 @@ export class ContractComponent implements OnInit {
   private hexaOnly = /^([a-zA-Z]{3,3}-[0-9]{1,5})$/i; 
   actionMode: number = 1;
 
-  constructor(private contractService: ContractsService, private fb: FormBuilder) { 
+  constructor(private contractService: ContractsService, private fb: FormBuilder,
+    private backRouter: Router) { 
     this.contractForm = this.fb.group({
       exactNumber: ['', [Validators.required, Validators.pattern(this.hexaOnly)]],
       sucursal: ['', [Validators.required]],
@@ -49,6 +51,11 @@ export class ContractComponent implements OnInit {
       this.contractService.addNewContract(newContract).subscribe();
       this.contractForm.reset();
     }  
+ }
+
+ cancel(){
+  this.contractForm.reset();
+  this.backRouter.navigate(['sgc/home/welcome']);
  }
 
 }

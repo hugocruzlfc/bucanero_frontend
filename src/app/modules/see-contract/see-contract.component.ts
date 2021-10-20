@@ -24,6 +24,7 @@ export class SeeContractComponent implements OnInit {
   constructor(private contractService: ContractsService,  private fb: FormBuilder) {
     this.contractForm = this.fb.group({
       exactNumber: ['', [Validators.required, Validators.pattern(this.hexaOnly)]],
+      estate: ['', [Validators.required]],
       sucursal: ['', [Validators.required]],
       signatureDate: ['', [Validators.required]],
       supplierClient: ['', [Validators.required]],
@@ -97,14 +98,14 @@ export class SeeContractComponent implements OnInit {
    modalMode(mode: number, item?: Contract){
     switch(mode){
       case 1:{
-        this.modalTitle = 'Detalles del Usuario';
+        this.modalTitle = 'Detalles del Contrato';
         this.actionMode = 1
         this.currentContract = item;
         this.showUser(this.currentContract)
        break;
       }
        case 2:{
-        this.modalTitle = 'Editar Usuario';
+        this.modalTitle = 'Editar Contrato';
         this.actionMode = 2
         this.currentContract = item;
         this.showUser(this.currentContract)
@@ -118,6 +119,7 @@ export class SeeContractComponent implements OnInit {
   
     this.contractForm.patchValue({
       'exactNumber': item.exactNumber,
+      'estate': item.estate,
       'sucursal' : item.sucursal ,
       'signatureDate': item.signatureDate,
       'supplierClient': item.supplierClient,

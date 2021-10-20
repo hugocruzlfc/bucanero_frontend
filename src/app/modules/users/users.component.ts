@@ -27,7 +27,8 @@ export class UsersComponent implements OnInit {
   actionMode: number = 1;
   currenUser: any;
 
-  constructor(private userService: UsersService,private fb: FormBuilder, private _location: Location) { 
+  constructor(private userService: UsersService,private fb: FormBuilder, 
+    private _location: Location) { 
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
       address: ['', [Validators.required]],

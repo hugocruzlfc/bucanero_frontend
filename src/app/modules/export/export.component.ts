@@ -76,6 +76,7 @@ export class ExportComponent implements OnInit {
     let contractsArray: any[] = [];
     let contractToExcel= new ContractEsp(); 
     contractToExcel.No_EXACT = item.exactNumber;
+    contractToExcel.Estado = item.estate;
     contractToExcel.Sucursal = item.sucursal;
     contractToExcel.Fecha_de_Firma = item.signatureDate;
     contractToExcel.Proveedor_Cliente = item.supplierClient;

@@ -17,10 +17,12 @@ export interface Contract {
     exportation: boolean;
     observations: string;
     contractAttached: string;
+    estate?: string
 }
 
 export class ContractEsp {
     No_EXACT?: string;
+    Estado?: string
     Sucursal?: string;
     Fecha_de_Firma?: Date;
     Proveedor_Cliente?: string;

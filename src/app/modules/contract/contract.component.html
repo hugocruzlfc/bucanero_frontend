@@ -189,7 +189,8 @@
                             <button  class="btn btn-primary" id="buttonSumit" (click)="workerContract()"
                             type="button" [disabled]="!contractForm.valid">Crear
                         </button>
-                              <button type="button" class="btn btn-dark" style="margin-left: 5px;" >Cancelar</button>
+                              <button type="button" class="btn btn-dark" style="margin-left: 5px;" 
+                              (click)="cancel()">Cancelar</button>
                           </div>
                       </div>
                   </div>
