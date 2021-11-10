@@ -38,7 +38,9 @@
                         <button type="button" class="btn btn-info btn-sm"  data-bs-target="#modalUsers" data-bs-toggle="modal"
                         style="margin-right: 10px;" (click)=" modalMode(2, item)">Detalles</button>
                         <button type="button" class="btn btn-success btn-sm"  data-bs-target="#modalUsers" data-bs-toggle="modal"
-                        (click)=" modalMode(3, item)">Editar</button>
+                        style="margin-right: 10px;" (click)="modalMode(3, item)" >Editar</button>
+                        <button type="button" class="btn btn-primary btn-sm"
+                        data-bs-target="#modalEliminarUsers" data-bs-toggle="modal" (click)="modalMode(4, item)">Eliminar</button>
                     </td>
                   </tr>
                 </tbody>
@@ -61,7 +63,8 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" 
-          [ngClass]="{'text-primary': modalTitle=='Añadir Usuario','text-info': modalTitle=='Detalles del Usuario', 'text-success': modalTitle=='Editar Usuario' }"
+          [ngClass]="{'text-primary': modalTitle=='Añadir Usuario',
+          'text-info': modalTitle=='Detalles del Usuario', 'text-success': modalTitle=='Editar Usuario' }"
           >{{modalTitle}}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true"></span>
@@ -136,9 +139,9 @@
                       <div class="form-control" style="margin-top: 10px;">
                           <label for="role" >Rol</label>
                         <select   class="form-select" id="role" name="role" formControlName="role">
-                          <option  value="">--Seleccione--</option>
+                          <option  value="" disabled>--Seleccione--</option>
                           <option value="Administrador">Administrador</option>
-                          <option value="Usuario">Usuario</option>
+                          <option value="Usuario">Tramitador</option>
                         </select>
                       </div>
                       </ng-container>
@@ -206,4 +209,41 @@
         </div>
       </div>
     </div>
+  </div>
+  </div>
+
+  <!-- modal Eliminar -->
+  <div class="modal"  id="modalEliminarUsers">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary" >Atención!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div> 
+        <div class="modal-body">
+          <div class="card border-light mb-3" style="max-width: 100%">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <p class="text-primary">
+                    Está seguro que desea eliminar al usuario {{currenUser?.name}}?
+                  </p>
+                </div>
+              </div>
+              <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12" style="text-align: right;">
+                  <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal"
+                  (click)="deletUser()">Eliminar</button>
+                  <button type="button" class="btn btn-dark btn-sm" data-bs-dismiss="modal"
+                  style="margin-left: 5px;">Cancelar</button>
+                </div>
+              </div>
+              
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>

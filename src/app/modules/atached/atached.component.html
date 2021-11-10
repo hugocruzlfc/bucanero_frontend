@@ -19,7 +19,7 @@
                   <tr>
                     <th scope="col">No.</th>
                     <th scope="col">EXACT</th>
-                    <th scope="col">Contrato/Suplemento</th>
+                    <!-- <th scope="col">Contrato/Suplemento</th> -->
                     <th scope="col">Proveedor/Cliente</th>
                     <th scope="col">Foto Adjunta</th>
                     <th scope="col"></th>
@@ -29,7 +29,7 @@
                   <tr class="table-light" *ngFor="let item of contracts; let i = index">
                     <th scope="row">{{i+1}}</th>
                     <td>{{item.exactNumber}}</td>
-                    <td>{{item.supplementContract}}</td>
+                    <!-- <td>{{item.supplementContract}}</td> -->
                     <td>{{item.sucursal}}</td>
                     <td>{{item.contractAttached | ifAtached:item.contractAttached}}</td>
                     <td>
@@ -79,7 +79,8 @@
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Seleccione la imagen">
                                       <img [src]="imageSrc" class="text-center" style="height: auto;width: 70%;" />
                                           </div>
-                                  <input type="file" accept="image/*" id="fileUpload" name="fileUpload" style="display: none;">
+                                  <input type="file" 
+                                  accept="image/*" id="fileUpload" name="fileUpload" style="display: none;">
                           </div>
                        </div>
                        <div class="col-md-6">

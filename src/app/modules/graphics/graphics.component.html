@@ -1,1 +1,77 @@
 
+<div class="card border-light mb-3" style="max-width:100%;">
+    <div class="card-body" style="padding-left: 50px; padding-right: 50px;">
+      <div class="container-fluid">
+        <br>
+        <div class="container">
+          <div class="row">
+            <div class="card border-light mb-3" style="max-width: 100%; text-align: center;">
+              <div class="card-header"><h2 class="card-title">Reportes Gráficos</h2></div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-5" >
+                
+                    <div class="myBar"  [ngClass]="{'myBarSelected': ruta == 'meses'}" 
+                    type="button"
+                    (click)="changeMenu(1)"><a><i class="fa fa-calendar faIcons" ></i></a>Contratos por meses</div>
+                    <div class="myBar"  [ngClass]="{'myBarSelected': ruta == 'vencimiento'}" 
+                    type="button" (click)="changeMenu(2)"><a>
+                      <i class="fa fa-shopping-cart faIcons"></i>  </a>Monto de los contratos</div>
+                        <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'contrato'}" 
+                type="button"  (click)="changeMenu(3)"><a>
+                    <i class="fa fa-window-close faIcons" ></i></a>Vigencia de los contratos</div>
+              </div>
+              <div class="col-md-7">
+                <ng-container *ngIf="ruta == 'meses'">
+                  <div style="display: block;">
+                    <canvas baseChart 
+                      [datasets]="barChartDataContract"
+                      [labels]="barChartLabelsMonts"
+                      [options]="barChartOptions"
+                      [plugins]="barChartPlugins"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType">
+                    </canvas>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="ruta == 'monto'">
+                  <div style="display: block;">
+                    <canvas baseChart 
+                      [datasets]="barChartDataTotalValue"
+                      [labels]="barChartLabelsTotalValue"
+                      [options]="barChartOptions"
+                      [plugins]="barChartPlugins"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType">
+                    </canvas>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="ruta =='contrato'">
+                  <div style="display: block;">
+                    <canvas baseChart 
+                      [datasets]="barChartDataExpired"
+                      [labels]="barChartLabelsExpired"
+                      [options]="barChartOptions"
+                      [plugins]="barChartPlugins"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType">
+                    </canvas>
+                  </div>
+                </ng-container>
+                
+                
+              </div>
+          </div>
+          <div class="row"  style="text-align: center;">
+            <div class="col-md-12">
+                <i class="fa fa-arrow-left fa-2x"  
+                style="cursor: pointer; text-align: center;margin-top: 20px" (click)="backClicked()"
+                data-bs-toggle="tooltip" data-bs-placement="right" title="Volver"></i>
+            </div>
+        </div>
+        </div>
+      </div>
+    </div>
+</div>

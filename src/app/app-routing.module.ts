@@ -6,7 +6,7 @@ const routes: Routes = [
   
   {
     path: '',
-    redirectTo: 'sgc',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   { path: 'sgc', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },

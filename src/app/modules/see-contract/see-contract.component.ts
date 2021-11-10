@@ -4,6 +4,10 @@ import {  FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ContractsService } from "./services/contracts.service";
 import { Contract } from "../shared/interfaces/contract.interface";
+import { Suplement } from "../shared/interfaces/suplement.interface";
+import { NotificationService } from '../notification/services/notification.service';
+declare var $: any;
+
 
 @Component({
   selector: 'app-see-contract',
@@ -13,15 +17,28 @@ import { Contract } from "../shared/interfaces/contract.interface";
 export class SeeContractComponent implements OnInit {
 
   contracts = Array<Contract>();
+  suplements = Array<Suplement>();
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
   modalTitle: string = '';
   actionMode: number = 1;
   currentContract: any;
   contractForm: FormGroup;
+  suplementForm: FormGroup;
   private hexaOnly = /^([a-zA-Z]{3,3}-[0-9]{1,5})$/i; 
+  options = {
+    autoClose: true,
+    keepAfterRouteChange: false
+  };
+  showDayYear = false;
+  contractPosition = 0;
+  
 
-  constructor(private contractService: ContractsService,  private fb: FormBuilder) {
+  constructor(private contractService: ContractsService,  private fb: FormBuilder,
+    private notificationService: NotificationService) {
+    this.suplementForm =this.fb.group({
+      amount: [null, [Validators.required]]
+    });
     this.contractForm = this.fb.group({
       exactNumber: ['', [Validators.required, Validators.pattern(this.hexaOnly)]],
       estate: ['', [Validators.required]],
@@ -29,10 +46,11 @@ export class SeeContractComponent implements OnInit {
       signatureDate: ['', [Validators.required]],
       supplierClient: ['', [Validators.required]],
       aplicantArea: ['', [Validators.required]],
-      supplementContract: ['', [Validators.required]],
+      contractType: ['', [Validators.required]],
       object: ['', [Validators.required]],
       processor: ['', [Validators.required]],
-      effect: ['', [Validators.required]],
+      effect: [null, [Validators.required]],
+      dayYear: [false],
       wayToPay: ['', [Validators.required]],
       termToPay: ['', [Validators.required]],
       nationalInternational: [null, [Validators.required]],
@@ -95,12 +113,13 @@ export class SeeContractComponent implements OnInit {
      });
    }
 
-   modalMode(mode: number, item?: Contract){
+   modalMode(mode: number,fila: number, item?: Contract){
     switch(mode){
       case 1:{
         this.modalTitle = 'Detalles del Contrato';
         this.actionMode = 1
         this.currentContract = item;
+        this.showDayYear = this.currentContract.dayYear == 'años' ? true : false;
         this.showUser(this.currentContract)
        break;
       }
@@ -108,7 +127,19 @@ export class SeeContractComponent implements OnInit {
         this.modalTitle = 'Editar Contrato';
         this.actionMode = 2
         this.currentContract = item;
+        this.showDayYear = this.currentContract.dayYear == 'años' ? true : false;
         this.showUser(this.currentContract)
+       break;
+      }
+       case 3:{
+        this.currentContract = item;
+        this.contractPosition = fila + 1;
+       break;
+      }
+       case 4:{
+        this.currentContract = item;
+        this.suplements = this.currentContract.suplements;
+
        break;
       }
     }
@@ -124,7 +155,7 @@ export class SeeContractComponent implements OnInit {
       'signatureDate': item.signatureDate,
       'supplierClient': item.supplierClient,
       'aplicantArea' : item.aplicantArea,
-      'supplementContract' : item.supplementContract,
+      'contractType' : item.contractType,
       'object' : item.object,
       'processor': item.processor,
       'effect' : item.effect,
@@ -142,13 +173,31 @@ export class SeeContractComponent implements OnInit {
       var editContract: Contract = this.contractForm.value;
       editContract.exportation = this.contractForm.value.exportation == 'Si' ? true : false;
       editContract.nationalInternational = this.contractForm.value.nationalInternational == 'Nacional' ? true : false;
-      console.log(editContract);
+      editContract.dayYear = this.contractForm.value.dayYear ? 'años': 'días';
       editContract.id =  this.currentContract.id;
-      this.contractService.editContract(editContract).subscribe(data => {this.getAllContracts()});
+      this.contractService.editContract(editContract).subscribe(data => {
+        this.notificationService.success('Contrato modificado correctamente',this.options);
+        this.getAllContracts();
+      });
     } 
 
-    deleteContract(item: Contract){
-      this.contractService.deleteContract(item).subscribe(data => {this.getAllContracts()});
+    deleteContract(){
+      this.contractService.deleteContract(this.currentContract).subscribe(data => {
+        this.notificationService.warn('Contrato eliminado correctamente',this.options);
+        this.getAllContracts(); 
+      });
+    }
+
+
+    addSuplement(){
+      let newSuplement: Suplement = this.suplementForm.value;
+      newSuplement.contractId = this.currentContract.id;
+      console.log(newSuplement);
+      this.contractService.addSuplement(newSuplement).subscribe(data => {
+        this.notificationService.warn('Suplemento añadido correctamente',this.options);
+        this.getAllContracts(); 
+      });
+      $("#modalSuplemento").modal("hide");
     }
 
 }

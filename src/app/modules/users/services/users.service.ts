@@ -33,5 +33,10 @@ export class UsersService {
    
   }
 
+  deletUser(user: User){
+    let id = user.id;
+    return this.httpClient.delete(`${this.apiUrl}/users/delete/${id}`)
+  }
+
 }
 

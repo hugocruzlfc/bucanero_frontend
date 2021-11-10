@@ -1,14 +1,15 @@
 export interface Contract {
     id?: number;
-    exactNumber: string;
+    exactNumber?: string;
     sucursal: string;
     signatureDate: Date;
     supplierClient: string,
     aplicantArea: string;
-    supplementContract: string;
+    contractType: string;
     object: string;
     processor: string;
-    effect: Date;
+    effect: number;
+    dayYear: string;
     wayToPay: string;
     termToPay: string;
     nationalInternational: boolean;
@@ -17,7 +18,13 @@ export interface Contract {
     exportation: boolean;
     observations: string;
     contractAttached: string;
-    estate?: string
+    estate?: string;
+    suplements?: {
+        id: number;
+        amount: number;
+        contractId: number;
+        createdAt: Date
+    };
 }
 
 export class ContractEsp {
@@ -27,10 +34,11 @@ export class ContractEsp {
     Fecha_de_Firma?: Date;
     Proveedor_Cliente?: string;
     Área?: string;
-    Contrato_Suplemento?: string;
+    Tipo_de_Contrato?: string;
     Objeto?: string;
     Tramitador?: string;
-    Vigencia?: Date;
+    Vigencia?: number;
+    Día_Año?: string;
     Forma_Pago?: string;
     Término_Pago?: string;
     Nacional_Internacional?: string;
@@ -39,3 +47,5 @@ export class ContractEsp {
     Exportación?: string;
     Observaciones?: string
 }
+
+

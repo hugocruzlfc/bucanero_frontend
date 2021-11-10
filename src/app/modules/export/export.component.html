@@ -18,7 +18,6 @@
                     <th scope="col"></th>
                     <th scope="col">No.</th>
                     <th scope="col">EXACT</th>
-                    <th scope="col">Sucursal</th>
                     <th scope="col">Proveedor/Cliente</th>
                     <th scope="col">Fecha firma</th>
                     <th scope="col">Vigencia</th>
@@ -32,9 +31,8 @@
                     <td>{{i+1}}</td>
                     <td>{{item.exactNumber}}</td>
                     <td>{{item.supplierClient}}</td>
-                    <td>{{item.sucursal}}</td>
                     <td>{{item.signatureDate}}</td>
-                    <td>{{item.effect}}</td>
+                    <td>{{item.effect}} {{item.dayYear}}</td>
                     <td>
                         <button type="button" class="btn btn-info btn-sm"
                         style="margin-right: 10px;" (click)="exportToExcel(item)">Exportar</button>
@@ -49,7 +47,8 @@
     <br>
     <div class="row"  style="text-align: center;">
         <div class="col-md-12">
-            <button type="button" class="btn btn-outline-primary" (click)="exportSelectedToExcel()">Exportar Seleccionados</button>
+            <button type="button" class="btn btn-outline-primary" (click)="exportSelectedToExcel()"
+            [disabled]="!selectedTrue">Exportar Seleccionados</button>
         </div>
     </div>
   </div>

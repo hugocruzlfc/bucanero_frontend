@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NotificationService } from "../notification/services/notification.service";
+import { ComunicationService } from '../shared/services/comunication.service';
 
 @Component({
   selector: 'app-home',
@@ -13,11 +14,12 @@ export class HomeComponent implements OnInit {
   userName =  '';
   isAdmin: boolean = false;
   
-  constructor(private router: Router,private route: ActivatedRoute, 
+  constructor(private router: Router,private route: ActivatedRoute, private comunicationService: ComunicationService,
           public notificationService: NotificationService) { 
             const navigation = this.router.getCurrentNavigation();
             let user = navigation?.extras?.state;
             this.userName = user?.name;
+            this.comunicationService.changeUserName(this.userName);
             if (user?.role == 'Administrador') {
               this.isAdmin = true;
               

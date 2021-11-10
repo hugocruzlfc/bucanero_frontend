@@ -4,6 +4,7 @@ import {  FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Contract } from "../shared/interfaces/contract.interface";
 import { AtachedService } from "../atached/services/atached.service";
+import { NotificationService } from '../notification/services/notification.service';
 
 @Component({
   selector: 'app-atached',
@@ -23,9 +24,14 @@ export class AtachedComponent implements OnInit {
   imageSrc = "assets/images/+imagen.png";
   fileContract? = new File([],'');
   fotoSelected: boolean = false;
+  options = {
+    autoClose: true,
+    keepAfterRouteChange: false
+  };
  
 
-  constructor(private atachedService: AtachedService,  private fb: FormBuilder) {
+  constructor(private atachedService: AtachedService,  private fb: FormBuilder,
+    private notificationService: NotificationService,) {
     this.contractForm = this.fb.group({
       exactNumber: ['', [Validators.required, Validators.pattern(this.hexaOnly)]],
       sucursal: ['', [Validators.required]],
@@ -149,9 +155,10 @@ export class AtachedComponent implements OnInit {
   atachedContract(){
     let formData = new FormData();
     formData.append('contractAttached', this.fileContract!);
-    this.atachedService.atachedContract(this.currentContract.id, formData).subscribe(data =>
-         this.getAllContracts()
-    );
+    this.atachedService.atachedContract(this.currentContract.id, formData).subscribe(data =>{
+      this.notificationService.success('Contrato adjuntado correctamente',this.options);
+         this.getAllContracts();
+    });
   }
 
 }

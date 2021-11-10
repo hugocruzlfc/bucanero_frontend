@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 
 import { ExportService } from "./services/export.service";
 import { Contract, ContractEsp } from "../shared/interfaces/contract.interface";
+import { NotificationService } from '../notification/services/notification.service';
 
 @Component({
   selector: 'app-export',
@@ -16,8 +17,13 @@ export class ExportComponent implements OnInit {
   contractsExport: boolean[] = [];
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+  options = {
+    autoClose: true,
+    keepAfterRouteChange: false
+  };
+  selectedTrue = false;
 
-  constructor(private exportService: ExportService) { }
+  constructor(private exportService: ExportService,private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.dtOptions = {
@@ -81,10 +87,11 @@ export class ExportComponent implements OnInit {
     contractToExcel.Fecha_de_Firma = item.signatureDate;
     contractToExcel.Proveedor_Cliente = item.supplierClient;
     contractToExcel.Área = item.aplicantArea;
-    contractToExcel.Contrato_Suplemento = item.supplementContract;
+    contractToExcel.Tipo_de_Contrato = item.contractType;
     contractToExcel.Objeto = item.object;
     contractToExcel.Tramitador = item.processor;
     contractToExcel.Vigencia = item.effect;
+    contractToExcel.Día_Año = item.dayYear;
     contractToExcel.Forma_Pago = item.wayToPay;
     contractToExcel.Término_Pago = item.termToPay;
     contractToExcel.Nacional_Internacional = item.nationalInternational? 'Si': 'No';
@@ -94,18 +101,23 @@ export class ExportComponent implements OnInit {
     contractToExcel.Observaciones = item.observations;
 
     contractsArray.push(contractToExcel);
-   this.exportService.exportExcel(contractsArray, 'Contrato');
-
+    this.exportService.exportExcel(contractsArray, 'Contrato');
+   this.notificationService.success('Contrato exportado correctamente',this.options);
   }
 
   checkOnClick(item: Contract, i: number){
-    console.log(item);
     if(this.contractsExport[i]){
       this.contractsExport[i] = false;
 
     }else{
       this.contractsExport[i] = true;
 
+    }
+    this.selectedTrue = false;
+    for( let value of this.contractsExport){
+         if(value){
+           this.selectedTrue = true;
+         }
     }
   }
 
@@ -118,10 +130,11 @@ export class ExportComponent implements OnInit {
             contractToExcel.Fecha_de_Firma = this.contracts[index].signatureDate;
             contractToExcel.Proveedor_Cliente = this.contracts[index].supplierClient;
             contractToExcel.Área = this.contracts[index].aplicantArea;
-            contractToExcel.Contrato_Suplemento = this.contracts[index].supplementContract;
+            contractToExcel.Tipo_de_Contrato = this.contracts[index].contractType;
             contractToExcel.Objeto = this.contracts[index].object;
             contractToExcel.Tramitador = this.contracts[index].processor;
             contractToExcel.Vigencia = this.contracts[index].effect;
+            contractToExcel.Día_Año = this.contracts[index].dayYear;
             contractToExcel.Forma_Pago = this.contracts[index].wayToPay;
             contractToExcel.Término_Pago = this.contracts[index].termToPay;
             contractToExcel.Nacional_Internacional = this.contracts[index].nationalInternational? 'Si': 'No';
@@ -136,6 +149,7 @@ export class ExportComponent implements OnInit {
     }
     if(this.contractsExportEsp.length > 0){
       this.exportService.exportExcel(this.contractsExportEsp, 'Contratos');
+      this.notificationService.success('Contratos exportados correctamente',this.options);
     }
     this.contractsExportEsp = [];
 

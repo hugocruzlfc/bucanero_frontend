@@ -3,9 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import {  FormGroup, FormBuilder, Validators } from '@angular/forms'; 
 import {Location} from '@angular/common';
+import { NotificationService } from '../notification/services/notification.service';
 
 import { User } from './../shared/interfaces/users.interface';
 import { UsersService } from './services/users.service';
+
 
 @Component({
   selector: 'app-users',
@@ -26,8 +28,12 @@ export class UsersComponent implements OnInit {
   private passwordSize = /[a-zA-z0-9]{6,16}/i;
   actionMode: number = 1;
   currenUser: any;
+  options = {
+    autoClose: true,
+    keepAfterRouteChange: false
+  };
 
-  constructor(private userService: UsersService,private fb: FormBuilder, 
+  constructor(private userService: UsersService,private fb: FormBuilder, private notificationService: NotificationService,
     private _location: Location) { 
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -96,11 +102,17 @@ export class UsersComponent implements OnInit {
      if (this.actionMode == 1) {
         var newUser: User;
         newUser = this.userForm.value;
-        this.userService.addNewUser(newUser).subscribe(data=>{this.getUsers();});
+        this.userService.addNewUser(newUser).subscribe(data =>{
+          this.getUsers();
+          this.notificationService.success('Usuario creado correctamente',this.options);
+        });
      } else { //editar
       var editUser: User = this.userForm.value;
       editUser.id =  this.currenUser.id;
-      this.userService.editUser(editUser).subscribe(data=>{this.getUsers();});
+      this.userService.editUser(editUser).subscribe(data=>{
+        this.getUsers();
+        this.notificationService.success('Usuario creado correctamente',this.options);
+      });
      }
      this.userForm.reset();
      
@@ -143,6 +155,10 @@ export class UsersComponent implements OnInit {
         this.showUser(this.currenUser)
        break;
       }
+       case 4:{
+        this.currenUser = item;
+       break;
+      }
     }
 
   }
@@ -150,5 +166,14 @@ export class UsersComponent implements OnInit {
   backClicked() {
     this._location.back();
   }
+
+  deletUser(){
+    this.userService.deletUser(this.currenUser).subscribe(data =>{
+      this.getUsers();
+        this.notificationService.warn('Usuario eliminado correctamente',this.options);
+    })
+  }
+
+ 
 
 }

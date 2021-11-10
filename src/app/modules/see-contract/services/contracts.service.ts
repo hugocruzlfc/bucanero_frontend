@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 
 import { api } from '../../../config';
 import { Contract } from '../../shared/interfaces/contract.interface';
+import { Suplement } from '../../shared/interfaces/suplement.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,9 @@ export class ContractsService {
   deleteContract(contract: Contract){
     let id = contract.id;
     return this.httpClient.delete(`${this.apiUrl}/contracts/delete/${id}`);
+  }
+
+  addSuplement(newSuplement: Suplement){
+    return this.httpClient.post(`${this.apiUrl}/sumplements/create`,newSuplement);
   }
 }

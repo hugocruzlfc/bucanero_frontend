@@ -19,8 +19,8 @@
                     <th scope="col">No.</th>
                     <th scope="col">EXACT</th>
                     <th scope="col">Estado</th>
-                    <th scope="col">Sucursal</th>
-                    <th scope="col">Proveedor/Cliente</th>
+                    <!-- <th scope="col">Proveedor/Cliente</th> -->
+                    <th scope="col">Fecha firma</th>
                     <th scope="col">Vigencia</th>
                     <th scope="col"></th>
                   </tr>
@@ -30,15 +30,19 @@
                     <th scope="row">{{i+1}}</th>
                     <td>{{item.exactNumber}}</td>
                     <td>{{item.estate}}</td>
-                    <td>{{item.supplierClient}}</td>
-                    <td>{{item.sucursal}}</td>
-                    <td>{{item.effect}}</td>
+                    <!-- <td>{{item.supplierClient}}</td> -->
+                    <td>{{item.signatureDate}}</td>
+                    <td>{{item.effect}} {{ item.dayYear}}</td>
                     <td>
-                        <button type="button" class="btn btn-info btn-sm"  data-bs-target="#modalUsers" data-bs-toggle="modal"
-                        style="margin-right: 10px;" (click)=" modalMode(1, item)">Detalles</button>
-                        <button type="button" class="btn btn-success btn-sm"  data-bs-target="#modalUsers" data-bs-toggle="modal"
-                        (click)=" modalMode(2, item)" style="margin-right: 10px;">Editar</button>
-                        <button type="button" class="btn btn-primary btn-sm"  (click)="deleteContract(item)">Eliminar</button>
+                        <button type="button" class="btn btn-info btn-sm"  data-bs-target="#modalContract" data-bs-toggle="modal"
+                        style="margin-right: 10px;" (click)=" modalMode(1, i, item)">Detalles</button>
+                        <button type="button" class="btn btn-success btn-sm"  data-bs-target="#modalContract" data-bs-toggle="modal"
+                        (click)=" modalMode(2, i,item)" style="margin-right: 10px;">Editar</button>
+                        <button type="button" class="btn btn-primary btn-sm" style="margin-right: 10px;"  (click)=" modalMode(3, i, item)"
+                        data-bs-target="#modalDeleteContract" data-bs-toggle="modal">Eliminar</button>
+                        <button type="button" class="btn btn-danger btn-sm" 
+                        data-bs-target="#modalSuplemento" data-bs-toggle="modal"
+                        (click)=" modalMode(4, i, item)">Suplemento</button>
                     </td>
                   </tr>
                 </tbody>
@@ -47,17 +51,86 @@
         </div>
       </div>
     </div>
-    <!-- <div class="row"  style="text-align: center;">
-        <div class="col-md-12">
-            <i class="fa fa-arrow-left fa-2x"  style="cursor: pointer; text-align: center;" (click)="backClicked()"
-            data-bs-toggle="tooltip" data-bs-placement="right" title="Volver"></i>
-        </div>
-    </div> -->
   </div>
 
 
+
+
+
     <!-- modal Añadir, Detalles y Editar -->
-    <div class="modal"  id="modalUsers">
+    <div class="modal"  id="modalSuplemento">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document"  >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-danger" >Añadir Suplemento</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="card border-light mb-3" style="max-width: 100%">
+                
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <form [formGroup]="suplementForm" >
+                        <fieldset>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <h6 style="text-align: center;">Suplementos en este contrtato</h6>
+                                <table class="table table-hover"  cellspacing="0">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">No.</th>
+                                      <th scope="col">Cantidad</th>
+                                      <th scope="col">Fecha de Creación</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr class="table-light" *ngFor="let item of suplements; let i = index">
+                                      <th scope="row">{{i+1}}</th>
+                                      <td>{{item.amount}}</td>
+                                      <td>{{item.createdAt |date}}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                                <div class="col-md-6"> 
+                                    <div class="form-floating">
+                                    <input type="number" class="form-control" id="amount"
+                                     name="amount" 
+                                    placeholder="Cantidad"
+                                    formControlName="amount">
+                                  <label for="amount" >Cantidad a añadir</label>
+                              </div>
+                              </div>
+                                
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                          <div class="row" style="margin-top: 20px;">
+                              <div class="col-md-12" style="text-align: right;">
+                                <button  class="btn btn-success" id="buttonSumit" data-bs-dismiss="modal" 
+                                (click)="addSuplement()"
+                                type="button" [disabled]="!suplementForm.valid">Aceptar
+                            </button>
+                                  <button type="button" class="btn btn-dark" 
+                                  style="margin-left: 5px;" data-bs-dismiss="modal">Cancelar</button>
+                              </div>
+                          </div>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                  
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal"  id="modalContract">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document"  >
           <div class="modal-content">
             <div class="modal-header">
@@ -173,6 +246,96 @@
                               <div class="col-md-6">
                                 <ng-container *ngIf="actionMode ==1">
                                   <div class="form-floating" style="margin-top: 10px;">
+                                    <input  type="text" class="form-control" id="contractType" name="contractType" 
+                                    formControlName="contractType"  readonly="">
+                                  <label for="contractType" >Tipo de contrato o suplemento</label>
+                              </div>
+                            </ng-container>
+                                <ng-container *ngIf="actionMode ==2">
+                                <div class="form-control" style="margin-top: 10px;">
+                                  <label for="contractType" >Tipo de contrato o suplemento</label>
+                                <select   class="form-select" id="contractType" name="contractType" 
+                                formControlName="contractType">
+                                  <option  value="" disabled>--Seleccione--</option>
+                                  <option value="Contrato de compra ventas">Contrato de compra ventas</option>
+                                  <option value="Contrato de servicios">Contrato de servicios</option>
+                                  <option value="Contrato de suministros">Contrato de suministros</option>
+                                  <option value="">Otros</option>
+                                </select>
+                              </div>
+                            </ng-container>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-control" style="margin-top: 10px; margin-bottom: 10px">
+                                  <label for="effect" >Vigencia</label>
+                                  <div class="row">
+                                    <div class="col-md-5">
+                                      <ng-container *ngIf="actionMode ==1">
+                                        <div class="form-check form-switch">
+                                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                          formControlName="dayYear" readonly="">
+                                          <label class="form-check-label" 
+                                          for="flexSwitchCheckDefault">Días/Años</label>
+                                        </div>
+                                      </ng-container>
+                                      <ng-container *ngIf="actionMode ==2">
+                                        <div class="form-check form-switch">
+                                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                          formControlName="dayYear" (click)="showDayYear =!showDayYear">
+                                          <label class="form-check-label" 
+                                          for="flexSwitchCheckDefault">Días/Años</label>
+                                        </div>
+                                      </ng-container>
+                                      
+
+                                    </div>
+                                    <div class="col-md-7">
+                                      <ng-container *ngIf="actionMode ==1">
+                                        <ng-container *ngIf = "!showDayYear">
+                                          <div class="input-group">
+                                            <input type="number" class="form-control" id="effect" name="effect" 
+                                             formControlName="effect" readonly=""
+                                            aria-label="Amount (to the nearest dollar)" autocomplete="off">
+                                            <span class="input-group-text">días</span>
+                                          </div>
+                                        </ng-container>
+                                        <ng-container *ngIf = "showDayYear">
+                                          <div class="input-group">
+                                            <input type="number" class="form-control" id="effect" name="effect" 
+                                             formControlName="effect" readonly=""
+                                            aria-label="Amount (to the nearest dollar)" autocomplete="off">
+                                            <span class="input-group-text">años</span>
+                                          </div>
+                                        </ng-container>
+                                      </ng-container>
+                                      <ng-container *ngIf="actionMode ==2">
+                                        <ng-container *ngIf = "!showDayYear">
+                                          <div class="input-group">
+                                            <input type="number" class="form-control" id="effect" name="effect" 
+                                             formControlName="effect" 
+                                            aria-label="Amount (to the nearest dollar)" autocomplete="off">
+                                            <span class="input-group-text">días</span>
+                                          </div>
+                                        </ng-container>
+                                        <ng-container *ngIf = "showDayYear">
+                                          <div class="input-group">
+                                            <input type="number" class="form-control" id="effect" name="effect" 
+                                             formControlName="effect" 
+                                            aria-label="Amount (to the nearest dollar)" autocomplete="off">
+                                            <span class="input-group-text">años</span>
+                                          </div>
+                                        </ng-container>
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                  </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-4">
+                                <ng-container *ngIf="actionMode ==1">
+                                  <div class="form-floating" style="margin-top: 10px;">
                                     <input  type="text" class="form-control" id="estate" name="estate" 
                                     formControlName="estate"  readonly="">
                                   <label for="estate" >Estado</label>
@@ -190,34 +353,6 @@
                               </div>
                             </ng-container>
                               </div>
-                              <div class="col-md-6">
-                                <ng-container *ngIf="actionMode ==1">
-                                  <div class="form-floating" style="margin-top: 10px;">
-                                    <input  type="text" class="form-control" id="supplementContract" name="supplementContract" 
-                                    formControlName="supplementContract"  readonly="">
-                                  <label for="supplementContract" >Tipo de contrato o suplemento</label>
-                              </div>
-                            </ng-container>
-                                <ng-container *ngIf="actionMode ==2">
-                                <div class="form-control" style="margin-top: 10px;">
-                                  <label for="supplementContract" >Tipo de contrato o suplemento</label>
-                                <select   class="form-select" id="supplementContract" name="supplementContract" 
-                                formControlName="supplementContract">
-                                  <option  value="">--Seleccione--</option>
-                                  <option value="Contrato de servicios">Contrato de servicios</option>
-                                  <option value="Contrato de compra ventas">Contrato de compra ventas</option>
-                                  <option value="Contrato de suministros">Contrato de suministros</option>
-                                  <option value="Suplemento de servicios">Suplemento de servicios</option>
-                                  <option value="Suplemento de compra ventas">Suplemento de compra ventas</option>
-                                  <option value="Suplemento de suministros">Suplemento de compra ventas</option>
-                                  <option value="">Otros</option>
-                                </select>
-                              </div>
-                            </ng-container>
-                              </div>
-                            </div>
-
-                            <div class="row">
                               <div class="col-md-4">
                                 <div class="form-floating" style="margin-top: 10px;">
                                   <ng-container *ngIf="actionMode ==1">
@@ -248,22 +383,6 @@
                                   formControlName="processor"  autocomplete="off">
                                   <label for="processor" >Tramitador</label>
                                 </ng-container>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-floating" style="margin-top: 10px;">
-                                  <ng-container *ngIf="actionMode ==1">
-                                  <input type="date" class="form-control" id="effect"
-                                  name="effect"  placeholder="Vigencia" readonly=""
-                                      formControlName="effect">
-                                      <label for="effect" >Vigencia</label>
-                                    </ng-container>
-                                  <ng-container *ngIf="actionMode ==2">
-                                  <input type="date" class="form-control" id="effect"
-                                  name="effect"  placeholder="Vigencia" 
-                                      formControlName="effect">
-                                      <label for="effect" >Vigencia</label>
-                                    </ng-container>
                                 </div>
                               </div>
                             </div>
@@ -420,7 +539,7 @@
                               <div class="col-md-12" style="text-align: right;">
                                <ng-container *ngIf="actionMode==1">
                             <button  type="button" 
-                                class="btn btn-light"  printSectionId = "print-section" ngxPrint>
+                                class="btn btn-light"  printSectionId ="print-section" ngxPrint>
                                 <i class="fa fa-print fa-2x" 
                                 style="cursor: pointer; margin-left: 10px;" 
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Imprimir Contrtato"
@@ -447,25 +566,86 @@
           </div>
         </div>
       </div>
+    </div>
 
 
-        <!-- Plantilla para imprimir el Contrato -->
-
-  <div  id = "print-section">  
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="row" style="text-align: center;">
-            <h2>Contrato</h2>
-          </div>
-          <div class="row">
-            <p>
-            </p>
-          </div>
-          <div class="row">
-            <p></p>
-          </div>
+  <!-- modal Eliminar -->
+  <div class="modal"  id="modalDeleteContract">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary" >Atención!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div> 
+        <div class="modal-body">
+          <div class="card border-light mb-3" style="max-width: 100%">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <p class="text-primary">
+                    Está seguro que desea eliminar el contrato {{contractPosition}}?
+                  </p>
+                </div>
+              </div>
+              <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12" style="text-align: right;">
+                  <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal"
+                  (click)="deleteContract()">Eliminar</button>
+                  <button type="button" class="btn btn-dark btn-sm" data-bs-dismiss="modal"
+                  style="margin-left: 5px;">Cancelar</button>
+                </div>
+              </div>
+              
+            </div>
         </div>
       </div>
     </div>
-</div >
+  </div>
+
+
+
+        <!-- Plantilla para imprimir el Contrato -->
+<!-- <ng-container *ngIf="impressContract"> -->
+        <div  id ="print-section">  
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row" style="text-align: center;">
+                  <h2>{{currentContract?.contractType}}</h2>
+                </div>
+                <div class="row">
+                <div class="col-md-12">
+                  <blockquote class="blockquote">
+                    <h6><small> <p>
+                      Dado el {{currentContract?.signatureDate}} en la Sucursal {{currentContract?.sucursal}} entre nuestra empresa y 
+                      {{currentContract?.supplierClient}}. Con {{currentContract?.aplicantArea}} como área rectora/solicitante y con una vigencia de
+                      {{currentContract?.effect}} {{currentContract?.dayYear}}. Presentando como objeto {{currentContract?.object}}, como tramitador 
+                      {{currentContract?.processor}}, como forma de pago {{currentContract?.wayToPay}}, como termino de pago {{currentContract?.termToPay}},
+                       como moneda de pago {{currentContract?.currencyPay}} y presentando un valor total de {{currentContract?.totalValue}}.
+                    </p>
+                    </small></h6>
+                    </blockquote>
+                </div>
+                </div>
+                <div class="row">
+                  <blockquote class="blockquote">
+                    <h6><small> <p>Observaciones: {{currentContract?.observations}}
+                    </p>
+                    </small></h6>
+                    </blockquote>
+                </div>
+                <div class="row">
+                  <div class="col-md-12" style="text-align: center;">
+                      <h6><small> <p>Firma: ___________________________.     Firma: _____________________________. </p>
+                     
+                      </small></h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div >
+    <!-- </ng-container> -->
+ 
