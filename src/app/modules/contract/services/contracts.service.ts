@@ -22,7 +22,6 @@ export class ContractsService {
   }
   
   sendEmail(emailBody: any){
-    console.log(emailBody);
     return this.httpClient.post(`${this.apiUrl}/sendemail`,emailBody);
   }
 }

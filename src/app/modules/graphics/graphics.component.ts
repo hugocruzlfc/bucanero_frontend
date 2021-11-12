@@ -103,19 +103,6 @@ getExpiredByContract(){
          } else {
           currentDay = value.effect * 365;
          }
-        //  let firmDay = value.signatureDate;
-        //  let actualDay =  new Date();
-        //  let firmDayFormat = (firmDay.getUTCFullYear() + "/" + (firmDay.getMonth() +1) + "/" + firmDay.getDate());
-        //  let actualDayFormat = (actualDay.getFullYear() + "/" + (actualDay.getMonth() +1) + "/" + actualDay.getDate());
-        //  var day1 = new Date(firmDayFormat); 
-        //  var day2 = new Date(actualDayFormat);     
-        //  const date1utc = Date.UTC(day1.getFullYear(), day1.getMonth(), day1.getDate());
-        //   const date2utc = Date.UTC(day2.getFullYear(), day2.getMonth(), day2.getDate());  
-        //   let day = 1000*60*60*24;
-        //   let result = (date2utc - date1utc)/day
-        //   console.log(result);
-         
-        
          this.barChartDataExpired[0].data?.push(currentDay);
          this.barChartLabelsExpired.push( value.exactNumber ? value.exactNumber : 'En espera de Exact');
       }

@@ -20,7 +20,8 @@ const routes: Routes = [
       { path: 'admin/users', loadChildren: () => import('../users/users.module').then(m => m.UsersModule) },
       { path: 'admin/graphics', loadChildren: () => import('../graphics/graphics.module').then(m => m.GraphicsModule) },
       { path: 'help', loadChildren: () => import('../help/help.module').then(m => m.HelpModule) },  
-      { path: 'atached', loadChildren: () => import('../atached/atached.module').then(m => m.AtachedModule) }
+      { path: 'atached', loadChildren: () => import('../atached/atached.module').then(m => m.AtachedModule) },
+      { path: 'expired', loadChildren: () => import('../expired/expired.module').then(m => m.ExpiredModule) }
     ]
      
   },

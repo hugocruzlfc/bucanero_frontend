@@ -108,6 +108,7 @@ export class SeeContractComponent implements OnInit {
       const aux: any = data;
       if (aux) {
         this.contracts = aux;
+        console.log(this.contracts)
         this.dtTrigger.next();
       }
      });
@@ -120,7 +121,7 @@ export class SeeContractComponent implements OnInit {
         this.actionMode = 1
         this.currentContract = item;
         this.showDayYear = this.currentContract.dayYear == 'años' ? true : false;
-        this.showUser(this.currentContract)
+        this.showContract(this.currentContract)
        break;
       }
        case 2:{
@@ -128,7 +129,7 @@ export class SeeContractComponent implements OnInit {
         this.actionMode = 2
         this.currentContract = item;
         this.showDayYear = this.currentContract.dayYear == 'años' ? true : false;
-        this.showUser(this.currentContract)
+        this.showContract(this.currentContract)
        break;
       }
        case 3:{
@@ -146,7 +147,7 @@ export class SeeContractComponent implements OnInit {
 
   }
 
-  showUser(item: Contract){
+  showContract(item: Contract){
   
     this.contractForm.patchValue({
       'exactNumber': item.exactNumber,

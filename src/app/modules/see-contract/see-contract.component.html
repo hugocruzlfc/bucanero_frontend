@@ -77,7 +77,7 @@
                         <fieldset>
                             <div class="row">
                               <div class="col-md-6">
-                                <h6 style="text-align: center;">Suplementos en este contrtato</h6>
+                                <h5 style="text-align: center;">Suplementos en este contrtato</h5>
                                 <table class="table table-hover"  cellspacing="0">
                                   <thead>
                                     <tr>
@@ -135,7 +135,8 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" 
-              [ngClass]="{'text-primary': modalTitle=='Añadir Usuario','text-info': modalTitle=='Detalles del Usuario', 'text-success': modalTitle=='Editar Usuario' }"
+              [ngClass]="{'text-info': modalTitle=='Detalles del Contrato', 
+              'text-success': modalTitle=='Editar Contrato' }"
               >{{modalTitle}}</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true"></span>

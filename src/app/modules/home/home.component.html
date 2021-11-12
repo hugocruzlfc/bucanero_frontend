@@ -38,6 +38,15 @@
               <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'exportToExcel'}" 
               type="button" routerLink="export" (click)="changeMenu(4)"><a>
                   <i class="fa fa-file-excel faIcons" ></i></a>Exportar a Excel</div>
+                  
+                  <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'expired'}" 
+                  type="button" routerLink="expired" (click)="changeMenu(8)"><a>
+                    <i class="fa fa-bell faIcons"  
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" 
+                    title="Tiene incidencias por atender">
+                    <span [matBadge]= "countExpired"  matBadgeColor= "warn"matBadgeSize="small" >  
+                     </span></i></a>Pronto al Vencer</div>
+
                   <ng-container *ngIf="isAdmin">
                     <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'admin'}" 
                     type="button" routerLink="admin" (click)="changeMenu(5)"><a>

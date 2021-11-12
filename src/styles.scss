@@ -3,10 +3,6 @@
 @import "~bootstrap/scss/bootstrap";
 @import "~bootswatch/dist/simplex/bootswatch";
 
-body{
-    color: rgb(14, 127, 131);
-    margin: 0; font-family: 'Roboto', sans-serif; 
-}
 
 .btn{
     border-radius: 30px;
@@ -19,3 +15,8 @@ body{
 label,option {
     color: rgb(14, 127, 131)
 }
+html, body { height: 100%; }
+body { 
+    color: rgb(14, 127, 131);
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; }

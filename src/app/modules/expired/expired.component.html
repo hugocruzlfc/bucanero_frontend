@@ -1,0 +1,280 @@
+<div class="card border-light mb-3" style="max-width:100%;">
+    <div class="card-body" style="padding-left: 50px; padding-right: 50px;">
+      <div class="container-fluid">
+        <br>
+        <div class="container">
+          <div class="row">
+            <div class="card border-light mb-3" style="max-width: 100%; text-align: center;">
+              <div class="card-header"><h4 class="card-title">Contratos Pronto al Vencer</h4></div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-md-12">
+            <div class="row justify-content-end">
+              <div class="col-md-12" style="text-align: right; padding-left: 33em;">
+                <fieldset>
+                  <div class="form-group row">
+                    <label for="filterContracts" class="col-form-label col-sm-2" 
+                    style=" padding-right: 0%;">Buscar:</label>
+                  <div class="col-sm-9" style="margin-left: 0%;">
+                <input type="text" [(ngModel)]="filterContracts" 
+                name="filterContracts" 
+                id="filterContracts" class="form-control" placeholder="Dato para buscar" tabindex="1">
+                  </div>
+                </div>
+                </fieldset>
+              </div>
+             
+            </div>
+          <br>
+            <table class="table table-hover" 
+            datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"  aria-label="...">
+                <thead>
+                  <tr>
+                    <!-- <th scope="col"></th> -->
+                    <th scope="col">No.</th>
+                    <th scope="col">EXACT</th>
+                    <th scope="col">Proveedor/Cliente</th>
+                    <th scope="col">Fecha firma</th>
+                    <th scope="col">Vigencia</th>
+                    <th scope="col">Vence en </th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-light" *ngFor="let contract of expiredContracts | filter: filterContracts; let i = index">
+                    <!-- <th scope="row"></th> -->
+                    <td>{{i+1}}</td>
+                    <td>{{contract.exactNumber}}</td>
+                    <td>{{contract.supplierClient}}</td>
+                    <td>{{contract.signatureDate}}</td>
+                    <td>{{contract.effect}} {{contract.dayYear}}</td>
+                    <td>
+                        {{contract.dayToExpired}} días
+                    </td>
+                    <td> <button type="button" class="btn btn-info btn-sm" 
+                       data-bs-target="#modalContract" data-bs-toggle="modal"
+                        (click)=" modalMode(contract)">Detalles</button></td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal"  id="modalContract">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document"  >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-info"
+          >Detalles del Contrato</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card border-light mb-3" style="max-width: 100%">
+            
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <form [formGroup]="contractForm" >
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-md-4"> 
+                                <div class="form-floating">
+                                <input type="text" class="form-control" id="exactNumber"
+                                 name="exactNumber"  readonly=""
+                                placeholder="SHA-1"
+                                formControlName="exactNumber">
+                              <label for="exactNumber" >Número de EXACT</label>
+                          </div>
+                          </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                        <input type="text" class="form-control" id="sucursal" 
+                                        name="sucursal" readonly=""
+                                        placeholder="Fecha de firma"
+                                        formControlName="sucursal">
+                                        <label for="sucursal" >Sucursal</label>
+                                  </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="signatureDate" 
+                                    name="signatureDate"  readonly=""
+                                    placeholder="Fecha de firma"
+                                    formControlName="signatureDate" autocomplete="off">
+                                    <label for="signatureDate" >Fecha de firma</label>
+                                  </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-floating" style="margin-top: 10px;">
+                              <input type="text" class="form-control" id="supplierClient" name="supplierClient" 
+                              formControlName="supplierClient"   readonly="" placeholder="Proveedor/Cliente">
+                              <label for="supplierClient">Proveedor/Cliente</label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-floating" style="margin-top: 10px;">
+                              <input type="text" class="form-control" id="aplicantArea" 
+                              name="aplicantArea"  readonly=""
+                              placeholder="55555555"
+                              formControlName="aplicantArea" autocomplete="off">
+                              <label for="aplicantArea">Área rectora/solicitante  </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-floating" style="margin-top: 10px;">
+                                <input  type="text" class="form-control" id="contractType" name="contractType" 
+                                formControlName="contractType"  readonly="">
+                              <label for="contractType" >Tipo de contrato o suplemento</label>
+                          </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-control" style="margin-top: 10px; margin-bottom: 10px">
+                              <label for="effect" >Vigencia</label>
+                              <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-check form-switch">
+                                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                      formControlName="dayYear" readonly="">
+                                      <label class="form-check-label" 
+                                      for="flexSwitchCheckDefault">Días/Años</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <ng-container *ngIf = "!showDayYear">
+                                      <div class="input-group">
+                                        <input type="number" class="form-control" id="effect" name="effect" 
+                                         formControlName="effect" readonly=""
+                                        aria-label="Amount (to the nearest dollar)" autocomplete="off">
+                                        <span class="input-group-text">días</span>
+                                      </div>
+                                    </ng-container>
+                                    <ng-container *ngIf = "showDayYear">
+                                      <div class="input-group">
+                                        <input type="number" class="form-control" id="effect" name="effect" 
+                                         formControlName="effect" readonly=""
+                                        aria-label="Amount (to the nearest dollar)" autocomplete="off">
+                                        <span class="input-group-text">años</span>
+                                      </div>
+                                    </ng-container>
+                                </div>
+                              </div>
+                              </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-4">
+                              <div class="form-floating" style="margin-top: 10px;">
+                                <input  type="text" class="form-control" id="estate" name="estate" 
+                                formControlName="estate"  readonly="">
+                              <label for="estate" >Estado</label>
+                          </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-floating" style="margin-top: 10px;">
+                              <input type="text" class="form-control" id="object" name="object" 
+                              placeholder="objeto" readonly=""
+                              formControlName="object"  autocomplete="off">
+                              <label for="object" >Objeto</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-floating" style="margin-top: 10px;">
+                              <input type="text" class="form-control" id="processor" name="processor" 
+                              placeholder="tramitador"   readonly=""
+                              formControlName="processor"  autocomplete="off">
+                              <label for="processor" >Tramitador</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <div class="form-floating" style="margin-top: 10px;">
+                              <input type="text" class="form-control" id="wayToPay" name="wayToPay" 
+                              placeholder="Forma de pago" readonly=""
+                              formControlName="wayToPay"  autocomplete="off">
+                              <label for="wayToPay" >Forma de pago</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-floating" style="margin-top: 10px;">
+                              <input type="text" class="form-control" id="termToPay" name="termToPay" 
+                              placeholder="Termino de pago" readonly=""
+                              formControlName="termToPay">
+                              <label for="termToPay" >Termino de pago</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-floating" style="margin-top: 10px;">
+                              <input type="text" class="form-control" id="currencyPay" name="currencyPay" 
+                              placeholder="Moneda de pago" readonly=""
+                              formControlName="currencyPay" >
+                              <label for="termToPay" >Moneda de pago</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-floating" style="margin-top: 10px;">
+                              <input type="number" class="form-control" id="totalValue"
+                              name="totalValue"  placeholder="Valor total" readonly=""
+                                  formControlName="totalValue">
+                                  <label for="totalValue" >Valor total</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-floating" style="margin-top: 10px;">
+                            
+                              <input type="text" class="form-control" id="nationalInternational"
+                              name="nationalInternational"  placeholder="Valor total" readonly=""
+                                  formControlName="nationalInternational">
+                                  <label for="totalValue" >Pago</label>
+                             
+                            </div>
+                           </div>
+                           <div class="col-md-2">
+                              <div class="form-floating" style="margin-top: 10px;">
+                              
+                                <input type="text" class="form-control" id="exportation"
+                                name="exportation"  placeholder="exportation" readonly=""
+                                    formControlName="exportation">
+                                    <label for="totalValue" >Exportación</label>
+                               
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-floating" style="margin-top: 10px;">
+                              
+                                <input type="text" class="form-control" id="observations"
+                                name="observations"  placeholder="observations" readonly=""
+                                    formControlName="observations">
+                                    <label for="totalValue" >Observaciones</label>
+                              </div>
+                          </div>
+                        </div>
+    
+                    </fieldset>
+                  </form>
+                </div>
+              </div>
+              
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
