@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 import {  FormGroup, FormBuilder, Validators } from '@angular/forms'; 
 
 import { ContractsService } from "./services/contracts.service";
 import { Contract } from "../shared/interfaces/contract.interface";
 import { Suplement } from "../shared/interfaces/suplement.interface";
 import { NotificationService } from '../notification/services/notification.service';
+import { ComunicationService } from '../shared/services/comunication.service';
 declare var $: any;
 
 
@@ -14,13 +15,14 @@ declare var $: any;
   templateUrl: './see-contract.component.html',
   styleUrls: ['./see-contract.component.scss']
 })
-export class SeeContractComponent implements OnInit {
+export class SeeContractComponent implements OnInit, OnDestroy {
 
   contracts = Array<Contract>();
   suplements = Array<Suplement>();
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
   modalTitle: string = '';
+  btCanCe: string = '';
   actionMode: number = 1;
   currentContract: any;
   contractForm: FormGroup;
@@ -32,15 +34,23 @@ export class SeeContractComponent implements OnInit {
   };
   showDayYear = false;
   contractPosition = 0;
+  userId = 0;
+  currentRole = '';
+  private subscription: Subscription | undefined;
+  private subscriptionUser: Subscription | undefined;
+  modalSuplementTitle = "";
+  modalSuplementMode = 0;
+  currentSuplement: any;
+  suplementoPosition = 0;
   
 
   constructor(private contractService: ContractsService,  private fb: FormBuilder,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService, private comunicationService: ComunicationService) {
     this.suplementForm =this.fb.group({
-      amount: [null, [Validators.required]]
+      amount: [null, [Validators.required, Validators.min(1)]]
     });
     this.contractForm = this.fb.group({
-      exactNumber: ['', [Validators.required, Validators.pattern(this.hexaOnly)]],
+      exactNumber: ['', [Validators.pattern(this.hexaOnly)]],
       estate: ['', [Validators.required]],
       sucursal: ['', [Validators.required]],
       signatureDate: ['', [Validators.required]],
@@ -59,6 +69,8 @@ export class SeeContractComponent implements OnInit {
       exportation: [null, [Validators.required]],
       observations: [''],
     });
+    this.subscriptionUser = this.comunicationService.customUserId.subscribe(userId => this.userId = userId);
+    this.subscriptionUser = this.comunicationService.customRole.subscribe(role => this.currentRole = role).add();
    }
 
   ngOnInit(): void {
@@ -103,21 +115,38 @@ export class SeeContractComponent implements OnInit {
   this.getAllContracts();
   }
 
+  ngOnDestroy(): void {
+   this.subscription?.unsubscribe();
+    this.subscriptionUser?.unsubscribe();
+  }
+
   getAllContracts(){
-    this.contractService.getAllContract().subscribe(data => {
-      const aux: any = data;
-      if (aux) {
-        this.contracts = aux;
-        console.log(this.contracts)
+
+    if (this.currentRole === 'Tramitador') {
+      this.subscription = this.contractService. getAllContractByUser(this.userId).subscribe(data => {
+        const aux: any = data;
+        if (aux) {
+          this.contracts = aux;
         this.dtTrigger.next();
-      }
-     });
+        }
+       }).add();
+      
+    } else {
+      this.subscription = this.contractService.getAllContract().subscribe(data => {
+        const aux: any = data;
+        if (aux) {
+          this.contracts = aux;
+        this.dtTrigger.next();
+        }
+       }).add();
+    }
    }
 
    modalMode(mode: number,fila: number, item?: Contract){
     switch(mode){
       case 1:{
-        this.modalTitle = 'Detalles del Contrato';
+        this.modalTitle = 'Detalles del contrato';
+        this.btCanCe = 'Cerrar'
         this.actionMode = 1
         this.currentContract = item;
         this.showDayYear = this.currentContract.dayYear == 'años' ? true : false;
@@ -125,7 +154,8 @@ export class SeeContractComponent implements OnInit {
        break;
       }
        case 2:{
-        this.modalTitle = 'Editar Contrato';
+        this.modalTitle = 'Editar contrato';
+        this.btCanCe = 'Cancelar'
         this.actionMode = 2
         this.currentContract = item;
         this.showDayYear = this.currentContract.dayYear == 'años' ? true : false;
@@ -140,6 +170,7 @@ export class SeeContractComponent implements OnInit {
        case 4:{
         this.currentContract = item;
         this.suplements = this.currentContract.suplements;
+        this.suplementForm.reset();
 
        break;
       }
@@ -189,6 +220,22 @@ export class SeeContractComponent implements OnInit {
       });
     }
 
+    modalModeSuplement(mode: number, item: Suplement, fila?: number){
+      this.currentSuplement = item;
+     if (mode===1) {   //editar suplemento
+       this.modalSuplementMode = 1;
+       this.modalSuplementTitle = 'Editar suplemento';
+       this.suplementForm.patchValue({
+        'amount': this.currentSuplement.amount
+        })
+       
+     } else {  //eliminar suplemento
+      this.modalSuplementTitle = 'Eliminar suplemento';
+      this.modalSuplementMode = 2;
+      this.suplementoPosition = fila!+1;
+     }
+    }
+
 
     addSuplement(){
       let newSuplement: Suplement = this.suplementForm.value;
@@ -199,6 +246,32 @@ export class SeeContractComponent implements OnInit {
         this.getAllContracts(); 
       });
       $("#modalSuplemento").modal("hide");
+    }
+
+    editSuplement(){
+
+      let editSuplement: Suplement = this.currentSuplement;
+      editSuplement.amount = this.suplementForm.value.amount;
+      this.contractService.editSuplement(editSuplement).subscribe(data => {
+        this.notificationService.success('Suplemento editado correctamente',this.options);
+        this.getAllContracts(); 
+      });
+      $("#modalDeleteSuplement").modal("hide");
+      this.cleanAmount();
+    }
+
+
+    deleteSuplement(){
+      this.contractService.deleteSuplement(this.currentSuplement.id).subscribe(data => {
+        this.notificationService.warn('Suplemento eliminado correctamente',this.options);
+        this.getAllContracts(); 
+      });
+      $("#modalSuplemento").modal("hide");
+    }
+
+
+    cleanAmount(){
+      this.suplementForm.reset();
     }
 
 }

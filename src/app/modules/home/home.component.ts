@@ -27,6 +27,8 @@ export class HomeComponent implements OnInit {
             let user = navigation?.extras?.state;
             this.userName = user?.name;
             this.comunicationService.changeUserName(this.userName);
+            this.comunicationService.changeRole(user?.role);
+            this.comunicationService.changeUserId(user?.id);
             if (user?.role == 'Administrador') {
               this.isAdmin = true;
             }

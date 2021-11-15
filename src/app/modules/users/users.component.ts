@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
 import { Subject } from 'rxjs';
 import {  FormGroup, FormBuilder, Validators } from '@angular/forms'; 
 import {Location} from '@angular/common';
@@ -20,6 +20,7 @@ export class UsersComponent implements OnInit {
   users = Array<User>();
   modalTitle: string = '';
   modalButtom: string = '';
+  btCanCe: string = '';
   intervalVariable : any;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
@@ -32,16 +33,17 @@ export class UsersComponent implements OnInit {
     autoClose: true,
     keepAfterRouteChange: false
   };
+  roleDefault: any;
 
   constructor(private userService: UsersService,private fb: FormBuilder, private notificationService: NotificationService,
-    private _location: Location) { 
+    private _location: Location, private cdref: ChangeDetectorRef) { 
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
       address: ['', [Validators.required]],
-      dni: [null, [Validators.required]],
-      celular: [null, [Validators.required]],
+      dni: [null, [Validators.required, Validators.min(11), Validators.max(11)]],
+      celular: [null, [Validators.required, Validators.min(8), Validators.max(8)]],
       role: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.pattern(this.isEmail)]],
+      email: ['', [Validators.required,Validators.pattern(this.isEmail)]],
       password: ['', [Validators.required, Validators.pattern(this.passwordSize)]],
     });
   }
@@ -88,6 +90,12 @@ export class UsersComponent implements OnInit {
   this.getUsers();
   }
 
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+    
+     }
+  
+
   getUsers(){
     this.userService.getAllUser().subscribe(data => {
       const aux: any = data;
@@ -111,7 +119,7 @@ export class UsersComponent implements OnInit {
       editUser.id =  this.currenUser.id;
       this.userService.editUser(editUser).subscribe(data=>{
         this.getUsers();
-        this.notificationService.success('Usuario creado correctamente',this.options);
+        this.notificationService.success('Usuario editado correctamente',this.options);
       });
      }
      this.userForm.reset();
@@ -134,25 +142,29 @@ export class UsersComponent implements OnInit {
     this.userForm.reset();
     switch(mode){
       case 1:{
-        this.modalTitle = 'Añadir Usuario';
+        this.modalTitle = 'Añadir usuario';
+        this.btCanCe = 'Cancelar'
         this.actionMode = 1;
         this.modalButtom = 'Añadir';
-       
+        this.roleDefault = "Tramitador";
        break;
       }
       case 2:{
-        this.modalTitle = 'Detalles del Usuario';
+        this.modalTitle = 'Detalles del usuario';
+        this.btCanCe = 'Cerrar'
         this.actionMode = 3
         this.currenUser = item;
         this.showUser(this.currenUser)
        break;
       }
        case 3:{
-        this.modalTitle = 'Editar Usuario';
+        this.modalTitle = 'Editar usuario';
+        this.btCanCe = 'Cancelar'
         this.actionMode = 2
         this.modalButtom = 'Editar'
         this.currenUser = item;
         this.showUser(this.currenUser)
+
        break;
       }
        case 4:{

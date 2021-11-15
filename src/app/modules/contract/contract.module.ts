@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule,  ReactiveFormsModule } from '@angular/forms';
+
+import { DirectivesModule } from '../../directives/directives.module'
 
 import { ContractRoutingModule } from './contract-routing.module';
 import { ContractComponent } from './contract.component';
@@ -13,7 +15,9 @@ import { ContractComponent } from './contract.component';
   imports: [
     CommonModule,
     ContractRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    DirectivesModule
   ]
 })
 export class ContractModule { }

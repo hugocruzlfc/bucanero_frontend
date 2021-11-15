@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 import { DataTablesModule } from 'angular-datatables';
+import { DirectivesModule } from '../../directives/directives.module'
 
 import { UsersRoutingModule } from './users-routing.module';
 import { UsersComponent } from './users.component';
@@ -15,8 +16,10 @@ import { UsersComponent } from './users.component';
   imports: [
     CommonModule,
     UsersRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
-    DataTablesModule
+    DataTablesModule,
+    DirectivesModule
   ]
 })
 export class UsersModule { }

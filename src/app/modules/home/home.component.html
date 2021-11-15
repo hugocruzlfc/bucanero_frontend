@@ -15,7 +15,7 @@
                   <i class="fa fa-user-circle fa-3x"  style="margin: 7px;"></i>
                       <span style="font-size: 20px;">{{userName}}</span>
                       <button type="button" class="btn btn-outline-success btn-sm" style="margin-left: 40px;" 
-                      (click)="logout()">Cerrar Sesión</button>
+                      (click)="logout()">Cerrar sesión</button>
                   </div> 
            <!-- </div> -->
         </div>
@@ -24,20 +24,20 @@
          <div class="col-md-2" >
               <div class="myBar"  [ngClass]="{'myBarSelected': ruta == 'crearContrato'}" 
               type="button" routerLink="contract" (click)="changeMenu(1)">
-              <a><i class="fa fa-file faIcons"></i></a>Crear Contrato</div>
+              <a><i class="fa fa-file faIcons"></i></a>Crear contrato</div>
 
               <div class="myBar"  [ngClass]="{'myBarSelected': ruta == 'verContrato'}" 
               type="button" routerLink="see-contract" (click)="changeMenu(2)"><a>
-                  <i class="fa fa-list-ol faIcons" ></i></a>Ver Contratos</div>
+                  <i class="fa fa-list-ol faIcons" ></i></a>Ver contratos</div>
 
               <div class="myBar"  [ngClass]="{'myBarSelected': ruta == 'adjuntarContrato'}" 
               type="button" routerLink="atached" (click)="changeMenu(3)"><a>
-                  <i class="fa fa-file-image faIcons" ></i></a>Adjuntar Contrato</div>
+                  <i class="fa fa-file-image faIcons" ></i></a>Adjuntar contrato</div>
 
               
               <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'exportToExcel'}" 
               type="button" routerLink="export" (click)="changeMenu(4)"><a>
-                  <i class="fa fa-file-excel faIcons" ></i></a>Exportar a Excel</div>
+                  <i class="fa fa-file-excel faIcons" ></i></a>Exportar a excel</div>
                   
                   <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'expired'}" 
                   type="button" routerLink="expired" (click)="changeMenu(8)"><a>
@@ -45,7 +45,7 @@
                     data-bs-toggle="tooltip" data-bs-placement="bottom" 
                     title="Tiene incidencias por atender">
                     <span [matBadge]= "countExpired"  matBadgeColor= "warn"matBadgeSize="small" >  
-                     </span></i></a>Pronto al Vencer</div>
+                     </span></i></a>Pronto al vencer</div>
 
                   <ng-container *ngIf="isAdmin">
                     <div class="myBar" [ngClass]="{'myBarSelected': ruta == 'admin'}" 
@@ -63,16 +63,11 @@
           
           </div>
          <div class="col-md-10" style="margin-left: 0px; margin-right:auto;">
-             
-              <!-- <br> -->
-             <!-- <div class="container"> -->
                 <div class="container">
                     <div class="card border-primary" style="max-width: 100%;">
                         <router-outlet></router-outlet>
                     </div>
                 </div>
-               
-             <!-- </div> -->
          </div>
       </div>
       
@@ -96,25 +91,6 @@
 
 
 
-
-<!-- <header>
-    <top-bar></top-bar>
- </header>
- <br>
- <br>
- <br>
-<body style="padding-top: 20px;">
-    <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-12">
-            <router-outlet></router-outlet>
-          </div>      
-        </div> 
-      </div>
-</body>
-<footer>
-    footer
-</footer> -->
 
 
 

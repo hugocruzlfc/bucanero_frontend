@@ -19,6 +19,7 @@ export interface Contract {
     observations: string;
     contractAttached: string;
     estate?: string;
+    userId: number;
     suplements?: {
         id: number;
         amount: number;

@@ -6,7 +6,7 @@
         <div class="container">
           <div class="row">
             <div class="card border-light mb-3" style="max-width: 100%; text-align: center;">
-              <div class="card-header"><h4 class="card-title">Contratos Creados</h4></div>
+              <div class="card-header"><h4 class="card-title">Contratos creados</h4></div>
             </div>
             
           </div>
@@ -57,12 +57,12 @@
 
 
 
-    <!-- modal Añadir, Detalles y Editar -->
+    <!-- modal Añadir Suplemnto-->
     <div class="modal"  id="modalSuplemento">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document"  >
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title text-danger" >Añadir Suplemento</h5>
+              <h5 class="modal-title text-danger" >Añadir suplemento</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true"></span>
               </button>
@@ -76,7 +76,7 @@
                       <form [formGroup]="suplementForm" >
                         <fieldset>
                             <div class="row">
-                              <div class="col-md-6">
+                              <div class="col-md-8">
                                 <h5 style="text-align: center;">Suplementos en este contrtato</h5>
                                 <table class="table table-hover"  cellspacing="0">
                                   <thead>
@@ -84,6 +84,7 @@
                                       <th scope="col">No.</th>
                                       <th scope="col">Cantidad</th>
                                       <th scope="col">Fecha de Creación</th>
+                                      <th></th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -91,16 +92,40 @@
                                       <th scope="row">{{i+1}}</th>
                                       <td>{{item.amount}}</td>
                                       <td>{{item.createdAt |date}}</td>
+                                      <td>
+                                        <button type="button" class="btn btn-success btn-sm" 
+                                        style="margin-right: 10px;"data-bs-target="#modalDeleteSuplement" 
+                                        data-bs-toggle="modal"  (click)="modalModeSuplement(1, item)">Editar</button>
+                                        <button type="button" class="btn btn-primary btn-sm" 
+                                        data-bs-target="#modalDeleteSuplement" data-bs-toggle="modal"
+                                        (click)="modalModeSuplement(2, item, i)">Eliminar</button>
+                                      </td>
                                     </tr>
                                   </tbody>
                                 </table>
                               </div>
-                                <div class="col-md-6"> 
+                                <div class="col-md-4"> 
                                     <div class="form-floating">
-                                    <input type="number" class="form-control" id="amount"
+                                    <input [ngClass]="{
+                                      'is-invalid':
+                                      contractForm.get('amount')?.errors &&
+                                      contractForm.get('amount')?.touched,
+                                      'is-valid':
+                                      contractForm.get('amount')?.touched &&
+                                      contractForm.get('amount')?.valid
+                                  }"
+                                    type="number" class="form-control" id="amount"
                                      name="amount" 
                                     placeholder="Cantidad"
                                     formControlName="amount">
+                                    <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                    contractForm.get('amount')?.hasError('min') &&
+                                    contractForm.get('amount')?.touched">Debe añadir una cantidad mayor que 0.
+                                   </div>
+                                   <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                   contractForm.get('sucursal')?.hasError('required') &&
+                                   contractForm.get('sucursal')?.touched"> Campo requerido
+                                  </div>
                                   <label for="amount" >Cantidad a añadir</label>
                               </div>
                               </div>
@@ -110,9 +135,9 @@
                         <div class="form-group">
                           <div class="row" style="margin-top: 20px;">
                               <div class="col-md-12" style="text-align: right;">
-                                <button  class="btn btn-success" id="buttonSumit" data-bs-dismiss="modal" 
+                                <button  class="btn btn-danger" id="buttonSumit" data-bs-dismiss="modal" 
                                 (click)="addSuplement()"
-                                type="button" [disabled]="!suplementForm.valid">Aceptar
+                                type="button" [disabled]="!suplementForm.valid">Añadir
                             </button>
                                   <button type="button" class="btn btn-dark" 
                                   style="margin-left: 5px;" data-bs-dismiss="modal">Cancelar</button>
@@ -154,7 +179,8 @@
                                 <div class="col-md-4"> 
                                     <div class="form-floating">
                                     <ng-container *ngIf="actionMode ==1">
-                                    <input type="text" class="form-control" id="exactNumber"
+                                    <input 
+                                    type="text" class="form-control" id="exactNumber"
                                      name="exactNumber"  readonly=""
                                     placeholder="SHA-1"
                                     formControlName="exactNumber">
@@ -162,10 +188,22 @@
                                
                               </ng-container>
                                     <ng-container *ngIf="actionMode ==2">
-                                    <input type="text" class="form-control" id="exactNumber"
+                                    <input [ngClass]="{
+                                      'is-invalid':
+                                      contractForm.get('exactNumber')?.errors &&
+                                      contractForm.get('exactNumber')?.touched,
+                                      'is-valid':
+                                      contractForm.get('exactNumber')?.touched &&
+                                      contractForm.get('exactNumber')?.valid
+                                  }"
+                                    type="text" class="form-control" id="exactNumber"
                                      name="exactNumber" 
                                     placeholder="SHA-1"
-                                    formControlName="exactNumber">
+                                    formControlName="exactNumber" appNotBlankSpaces>
+                                    <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                    contractForm.get('exactNumber')?.hasError('pattern') &&
+                                    contractForm.get('exactNumber')?.touched">Número de exact incorrecto. Ej: SHG-32
+                                   </div>
                                   <label for="exactNumber" >Número de EXACT</label>
                               </ng-container>
                               </div>
@@ -180,10 +218,22 @@
                                             <label for="sucursal" >Sucursal</label>
                                         </ng-container>
                                         <ng-container *ngIf="actionMode ==2">
-                                            <input type="text" class="form-control" id="sucursal" 
+                                            <input [ngClass]="{
+                                              'is-invalid':
+                                              contractForm.get('sucursal')?.errors &&
+                                              contractForm.get('sucursal')?.touched,
+                                              'is-valid':
+                                              contractForm.get('sucursal')?.touched &&
+                                              contractForm.get('sucursal')?.valid
+                                          }"
+                                            type="text" class="form-control" id="sucursal" 
                                             name="sucursal" 
                                             placeholder="Fecha de firma"
-                                            formControlName="sucursal">
+                                            formControlName="sucursal" appNotBlankSpaces>
+                                            <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                              contractForm.get('sucursal')?.hasError('required') &&
+                              contractForm.get('sucursal')?.touched"> Campo requerido
+                             </div>
                                             <label for="sucursal" >Sucursal</label>
                                         </ng-container>
                                       </div>
@@ -198,10 +248,22 @@
                                         <label for="signatureDate" >Fecha de firma</label>
                                         </ng-container>
                                         <ng-container *ngIf="actionMode ==2">
-                                        <input type="date" class="form-control" id="signatureDate" 
+                                        <input [ngClass]="{
+                                          'is-invalid':
+                                          contractForm.get('signatureDate')?.errors &&
+                                          contractForm.get('signatureDate')?.touched,
+                                          'is-valid':
+                                          contractForm.get('signatureDate')?.touched &&
+                                          contractForm.get('signatureDate')?.valid
+                                      }"
+                                        type="date" class="form-control" id="signatureDate" 
                                         name="signatureDate" 
                                         placeholder="Fecha de firma"
                                         formControlName="signatureDate" autocomplete="off">
+                                        <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                        contractForm.get('signatureDate')?.hasError('required') &&
+                                        contractForm.get('signatureDate')?.touched"> Campo requerido
+                                       </div>
                                         <label for="signatureDate" >Fecha de firma</label>
                                         </ng-container>
                                       </div>
@@ -217,8 +279,21 @@
                                   <label for="supplierClient">Proveedor/Cliente</label>
                                 </ng-container>
                                   <ng-container *ngIf="actionMode ==2">
-                                  <input type="text" class="form-control" id="supplierClient" name="supplierClient" 
-                                  formControlName="supplierClient"  placeholder="Proveedor/Cliente">
+                                  <input [ngClass]="{
+                                    'is-invalid':
+                                    contractForm.get('supplierClient')?.errors &&
+                                    contractForm.get('supplierClient')?.touched,
+                                    'is-valid':
+                                    contractForm.get('supplierClient')?.touched &&
+                                    contractForm.get('supplierClient')?.valid
+                                }"
+                                  type="text" class="form-control" id="supplierClient" name="supplierClient" 
+                                  formControlName="supplierClient"  placeholder="Proveedor/Cliente"
+                                  appNotBlankSpaces>
+                                  <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                              contractForm.get('supplierClient')?.hasError('required') &&
+                              contractForm.get('supplierClient')?.touched"> Campo requerido
+                             </div>
                                   <label for="supplierClient">Proveedor/Cliente</label>
                                 </ng-container>
                                 </div>
@@ -233,10 +308,23 @@
                                   <label for="aplicantArea">Área rectora/solicitante  </label>
                                 </ng-container>
                                   <ng-container *ngIf="actionMode ==2">
-                                  <input type="text" class="form-control" id="aplicantArea" 
+                                  <input [ngClass]="{
+                                    'is-invalid':
+                                    contractForm.get('aplicantArea')?.errors &&
+                                    contractForm.get('aplicantArea')?.touched,
+                                    'is-valid':
+                                    contractForm.get('aplicantArea')?.touched &&
+                                    contractForm.get('aplicantArea')?.valid
+                                }"
+                                  type="text" class="form-control" id="aplicantArea" 
                                   name="aplicantArea"  
                                   placeholder="55555555"
-                                  formControlName="aplicantArea" autocomplete="off">
+                                  formControlName="aplicantArea" autocomplete="off"
+                                  appNotBlankSpaces>
+                                  <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                  contractForm.get('aplicantArea')?.hasError('required') &&
+                                  contractForm.get('aplicantArea')?.touched"> Campo requerido
+                                 </div>
                                   <label for="aplicantArea">Área rectora/solicitante  </label>
                                 </ng-container>
                                 </div>
@@ -255,7 +343,15 @@
                                 <ng-container *ngIf="actionMode ==2">
                                 <div class="form-control" style="margin-top: 10px;">
                                   <label for="contractType" >Tipo de contrato o suplemento</label>
-                                <select   class="form-select" id="contractType" name="contractType" 
+                                <select   [ngClass]="{
+                                  'is-invalid':
+                                  contractForm.get('contractType')?.errors &&
+                                  contractForm.get('contractType')?.touched,
+                                  'is-valid':
+                                  contractForm.get('contractType')?.touched &&
+                                  contractForm.get('contractType')?.valid
+                              }"
+                                 class="form-select" id="contractType" name="contractType" 
                                 formControlName="contractType">
                                   <option  value="" disabled>--Seleccione--</option>
                                   <option value="Contrato de compra ventas">Contrato de compra ventas</option>
@@ -263,6 +359,10 @@
                                   <option value="Contrato de suministros">Contrato de suministros</option>
                                   <option value="">Otros</option>
                                 </select>
+                                <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                            contractForm.get('contractType')?.hasError('required') &&
+                            contractForm.get('contractType')?.touched"> Campo requerido
+                           </div>
                               </div>
                             </ng-container>
                               </div>
@@ -273,7 +373,8 @@
                                     <div class="col-md-5">
                                       <ng-container *ngIf="actionMode ==1">
                                         <div class="form-check form-switch">
-                                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                          <input 
+                                          class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
                                           formControlName="dayYear" readonly="">
                                           <label class="form-check-label" 
                                           for="flexSwitchCheckDefault">Días/Años</label>
@@ -281,8 +382,9 @@
                                       </ng-container>
                                       <ng-container *ngIf="actionMode ==2">
                                         <div class="form-check form-switch">
-                                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
-                                          formControlName="dayYear" (click)="showDayYear =!showDayYear">
+                                          <input 
+                                          class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
+                                          formControlName="dayYear"  value="false" [(ngModel)]="showDayYear">
                                           <label class="form-check-label" 
                                           for="flexSwitchCheckDefault">Días/Años</label>
                                         </div>
@@ -294,36 +396,64 @@
                                       <ng-container *ngIf="actionMode ==1">
                                         <ng-container *ngIf = "!showDayYear">
                                           <div class="input-group">
-                                            <input type="number" class="form-control" id="effect" name="effect" 
+                                            <input 
+                                            type="number" class="form-control" id="effect" name="effect" 
                                              formControlName="effect" readonly=""
                                             aria-label="Amount (to the nearest dollar)" autocomplete="off">
                                             <span class="input-group-text">días</span>
+                                            
                                           </div>
                                         </ng-container>
                                         <ng-container *ngIf = "showDayYear">
                                           <div class="input-group">
-                                            <input type="number" class="form-control" id="effect" name="effect" 
+                                            <input 
+                                            type="number" class="form-control" id="effect" name="effect" 
                                              formControlName="effect" readonly=""
                                             aria-label="Amount (to the nearest dollar)" autocomplete="off">
                                             <span class="input-group-text">años</span>
+                                           
                                           </div>
                                         </ng-container>
                                       </ng-container>
                                       <ng-container *ngIf="actionMode ==2">
                                         <ng-container *ngIf = "!showDayYear">
                                           <div class="input-group">
-                                            <input type="number" class="form-control" id="effect" name="effect" 
+                                            <input [ngClass]="{
+                                              'is-invalid':
+                                              contractForm.get('effect')?.errors &&
+                                              contractForm.get('effect')?.touched,
+                                              'is-valid':
+                                              contractForm.get('effect')?.touched &&
+                                              contractForm.get('effect')?.valid
+                                          }"
+                                            type="number" class="form-control" id="effect" name="effect" 
                                              formControlName="effect" 
                                             aria-label="Amount (to the nearest dollar)" autocomplete="off">
                                             <span class="input-group-text">días</span>
+                                            <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                            contractForm.get('effect')?.hasError('required') &&
+                                            contractForm.get('effect')?.touched"> Campo requerido
+                                          </div>
                                           </div>
                                         </ng-container>
                                         <ng-container *ngIf = "showDayYear">
                                           <div class="input-group">
-                                            <input type="number" class="form-control" id="effect" name="effect" 
+                                            <input [ngClass]="{
+                                              'is-invalid':
+                                              contractForm.get('effect')?.errors &&
+                                              contractForm.get('effect')?.touched,
+                                              'is-valid':
+                                              contractForm.get('effect')?.touched &&
+                                              contractForm.get('effect')?.valid
+                                          }"
+                                            type="number" class="form-control" id="effect" name="effect" 
                                              formControlName="effect" 
                                             aria-label="Amount (to the nearest dollar)" autocomplete="off">
                                             <span class="input-group-text">años</span>
+                                            <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                            contractForm.get('effect')?.hasError('required') &&
+                                            contractForm.get('effect')?.touched"> Campo requerido
+                                          </div>
                                           </div>
                                         </ng-container>
                                       </ng-container>
@@ -345,12 +475,24 @@
                                 <ng-container *ngIf="actionMode ==2">
                                 <div class="form-control" style="margin-top: 10px;">
                                   <label for="estate" >Estado</label>
-                                <select   class="form-select" id="estate" name="estate" 
+                                <select   [ngClass]="{
+                                  'is-invalid':
+                                  contractForm.get('estate')?.errors &&
+                                  contractForm.get('estate')?.touched,
+                                  'is-valid':
+                                  contractForm.get('estate')?.touched &&
+                                  contractForm.get('estate')?.valid
+                              }"
+                                class="form-select" id="estate" name="estate" 
                                 formControlName="estate">
                                   <option  value="">--Seleccione--</option>
                                   <option value="Ejecución">Ejecución</option>
                                   <option value="Vencido">Vencido</option>
                                 </select>
+                                <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                            contractForm.get('estate')?.hasError('required') &&
+                                            contractForm.get('estate')?.touched"> Campo requerido
+                                          </div>
                               </div>
                             </ng-container>
                               </div>
@@ -363,9 +505,21 @@
                                   <label for="object" >Objeto</label>
                                 </ng-container>
                                   <ng-container *ngIf="actionMode ==2">
-                                  <input type="text" class="form-control" id="object" name="object" 
+                                  <input [ngClass]="{
+                                    'is-invalid':
+                                    contractForm.get('object')?.errors &&
+                                    contractForm.get('object')?.touched,
+                                    'is-valid':
+                                    contractForm.get('object')?.touched &&
+                                    contractForm.get('object')?.valid
+                                }"
+                                  type="text" class="form-control" id="object" name="object" 
                                   placeholder="objeto" 
-                                  formControlName="object"  autocomplete="off">
+                                  formControlName="object"  autocomplete="off" appNotBlankSpaces>
+                                  <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                  contractForm.get('object')?.hasError('required') &&
+                                  contractForm.get('object')?.touched"> Campo requerido
+                                 </div>
                                   <label for="object" >Objeto</label>
                                 </ng-container>
                                 </div>
@@ -379,9 +533,21 @@
                                   <label for="processor" >Tramitador</label>
                                 </ng-container>
                                   <ng-container *ngIf="actionMode ==2">
-                                  <input type="text" class="form-control" id="processor" name="processor" 
+                                  <input [ngClass]="{
+                                    'is-invalid':
+                                    contractForm.get('processor')?.errors &&
+                                    contractForm.get('processor')?.touched,
+                                    'is-valid':
+                                    contractForm.get('processor')?.touched &&
+                                    contractForm.get('processor')?.valid
+                                }"
+                                  type="text" class="form-control" id="processor" name="processor" 
                                   placeholder="tramitador" 
-                                  formControlName="processor"  autocomplete="off">
+                                  formControlName="processor"  autocomplete="off" appNotBlankSpaces>
+                                  <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                  contractForm.get('processor')?.hasError('required') &&
+                                  contractForm.get('processor')?.touched"> Campo requerido
+                                 </div>
                                   <label for="processor" >Tramitador</label>
                                 </ng-container>
                                 </div>
@@ -397,9 +563,21 @@
                                   <label for="wayToPay" >Forma de pago</label>
                                   </ng-container>
                                   <ng-container *ngIf="actionMode ==2">
-                                  <input type="text" class="form-control" id="wayToPay" name="wayToPay" 
+                                  <input [ngClass]="{
+                                    'is-invalid':
+                                    contractForm.get('wayToPay')?.errors &&
+                                    contractForm.get('wayToPay')?.touched,
+                                    'is-valid':
+                                    contractForm.get('wayToPay')?.touched &&
+                                    contractForm.get('wayToPay')?.valid
+                                }"
+                                  type="text" class="form-control" id="wayToPay" name="wayToPay" 
                                   placeholder="Forma de pago" 
-                                  formControlName="wayToPay"  autocomplete="off">
+                                  formControlName="wayToPay"  autocomplete="off" appNotBlankSpaces>
+                                  <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                  contractForm.get('wayToPay')?.hasError('required') &&
+                                  contractForm.get('wayToPay')?.touched"> Campo requerido
+                                 </div>
                                   <label for="wayToPay" >Forma de pago</label>
                                   </ng-container>
                                 </div>
@@ -413,9 +591,21 @@
                                   <label for="termToPay" >Termino de pago</label>
                                 </ng-container>
                                   <ng-container *ngIf="actionMode ==2">
-                                  <input type="text" class="form-control" id="termToPay" name="termToPay" 
+                                  <input [ngClass]="{
+                                    'is-invalid':
+                                    contractForm.get('termToPay')?.errors &&
+                                    contractForm.get('termToPay')?.touched,
+                                    'is-valid':
+                                    contractForm.get('termToPay')?.touched &&
+                                    contractForm.get('termToPay')?.valid
+                                }"
+                                  type="text" class="form-control" id="termToPay" name="termToPay" 
                                   placeholder="Termino de pago" 
-                                  formControlName="termToPay">
+                                  formControlName="termToPay" appNotBlankSpaces>
+                                  <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                  contractForm.get('termToPay')?.hasError('required') &&
+                                  contractForm.get('termToPay')?.touched"> Campo requerido
+                                </div>
                                   <label for="termToPay" >Termino de pago</label>
                                 </ng-container>
                                 </div>
@@ -429,9 +619,21 @@
                                   <label for="termToPay" >Moneda de pago</label>
                                 </ng-container>
                                   <ng-container *ngIf="actionMode ==2">
-                                  <input type="text" class="form-control" id="currencyPay" name="currencyPay" 
+                                  <input [ngClass]="{
+                                    'is-invalid':
+                                    contractForm.get('currencyPay')?.errors &&
+                                    contractForm.get('currencyPay')?.touched,
+                                    'is-valid':
+                                    contractForm.get('currencyPay')?.touched &&
+                                    contractForm.get('currencyPay')?.valid
+                                }"
+                                  type="text" class="form-control" id="currencyPay" name="currencyPay" 
                                   placeholder="Moneda de pago" 
                                   formControlName="currencyPay" >
+                                  <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                  contractForm.get('currencyPay')?.hasError('required') &&
+                                  contractForm.get('currencyPay')?.touched"> Campo requerido
+                                 </div>
                                   <label for="termToPay" >Moneda de pago</label>
                                 </ng-container>
                                 </div>
@@ -445,9 +647,21 @@
                                       <label for="totalValue" >Valor total</label>
                                   </ng-container>
                                   <ng-container *ngIf="actionMode ==2">
-                                  <input type="number" class="form-control" id="totalValue"
+                                  <input [ngClass]="{
+                                    'is-invalid':
+                                    contractForm.get('totalValue')?.errors &&
+                                    contractForm.get('totalValue')?.touched,
+                                    'is-valid':
+                                    contractForm.get('totalValue')?.touched &&
+                                    contractForm.get('totalValue')?.valid
+                                }"
+                                  type="number" class="form-control" id="totalValue"
                                   name="totalValue"  placeholder="Valor total" 
                                       formControlName="totalValue">
+                                      <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                      contractForm.get('totalValue')?.hasError('required') &&
+                                      contractForm.get('totalValue')?.touched"> Campo requerido
+                                     </div>
                                       <label for="totalValue" >Valor total</label>
                                   </ng-container>
                                 </div>
@@ -469,8 +683,13 @@
                                    <legend class="mt-4">Pago</legend>
                                    <div class="form-check form-check-inline">
                                      <label class="form-check-label">
-                                       <input type="radio" class="form-check-input" name="nationalInternational"
+                                       <input 
+                                       type="radio" class="form-check-input" name="nationalInternational"
                                        id="nationalInternational" value=Nacional formControlName="nationalInternational">
+                                       <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                contractForm.get('nationalInternational')?.hasError('required') &&
+                                contractForm.get('nationalInternational')?.touched"> Campo requerido
+                               </div>
                                        Nacional
                                      </label>
                                    </div>
@@ -478,6 +697,10 @@
                                      <label class="form-check-label">
                                        <input type="radio" class="form-check-input" name="nationalInternational"
                                        id="nationalInternational" value=Internacional formControlName="nationalInternational">
+                                       <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                contractForm.get('nationalInternational')?.hasError('required') &&
+                                contractForm.get('nationalInternational')?.touched"> Campo requerido
+                               </div>
                                        Internacional
                                      </label>
                                    </div>
@@ -500,6 +723,10 @@
                                   <label class="form-check-label">
                                     <input type="radio" class="form-check-input" name="exportation" 
                                     id="exportation" value="Si" formControlName="exportation">
+                                    <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                              contractForm.get('exportation')?.hasError('required') &&
+                              contractForm.get('exportation')?.touched"> Campo requerido
+                             </div>
                                     Si
                                   </label>
                                 </div>
@@ -507,6 +734,10 @@
                                   <label class="form-check-label">
                                     <input type="radio" class="form-check-input" name="exportation" 
                                     id="exportation" value="No" formControlName="exportation">
+                                    <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                              contractForm.get('exportation')?.hasError('required') &&
+                              contractForm.get('exportation')?.touched"> Campo requerido
+                             </div>
                                     No
                                   </label>
                                 </div>
@@ -543,7 +774,8 @@
                                 class="btn btn-light"  printSectionId ="print-section" ngxPrint>
                                 <i class="fa fa-print fa-2x" 
                                 style="cursor: pointer; margin-left: 10px;" 
-                                data-bs-toggle="tooltip" data-bs-placement="top" title="Imprimir Contrtato"
+                                data-bs-toggle="tooltip" data-bs-placement="top" 
+                                title="Imprimir Contrato"
                                 ></i>
                             </button >
                                </ng-container>
@@ -554,7 +786,7 @@
                             </button>
                                </ng-container>
                                   <button type="button" class="btn btn-dark" 
-                                  style="margin-left: 5px;" data-bs-dismiss="modal">Cancelar</button>
+                                  style="margin-left: 5px;" data-bs-dismiss="modal">{{btCanCe}}</button>
                               </div>
                           </div>
                       </div>
@@ -570,7 +802,91 @@
     </div>
 
 
-  <!-- modal Eliminar -->
+  <!-- modal Editar/Eliminar Suplemento -->
+  <div class="modal"  id="modalDeleteSuplement">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" 
+          [ngClass]="{'text-success': modalSuplementMode === 1, 
+          'text-primary':  modalSuplementMode === 2 }"
+          >{{modalSuplementTitle}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div> 
+        <div class="modal-body">
+          <div class="card border-light mb-3" style="max-width: 100%">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <ng-container *ngIf="modalSuplementMode === 1">
+                    <form [formGroup]="suplementForm" >
+                      <fieldset>
+                          <div class="row justify-content-center">
+                              <div class="col-md-6"> 
+                                  <div class="form-floating">
+                                  <input [ngClass]="{
+                                    'is-invalid':
+                                    contractForm.get('amount')?.errors &&
+                                    contractForm.get('amount')?.touched,
+                                    'is-valid':
+                                    contractForm.get('amount')?.touched &&
+                                    contractForm.get('amount')?.valid
+                                }"
+                                  type="number" class="form-control" id="amount"
+                                   name="amount" 
+                                  placeholder="Cantidad"
+                                  formControlName="amount">
+                                  <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                  contractForm.get('amount')?.hasError('min') &&
+                                  contractForm.get('amount')?.touched">Debe añadir una cantidad mayor que 0.
+                                 </div>
+                                 <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
+                                 contractForm.get('sucursal')?.hasError('required') &&
+                                 contractForm.get('sucursal')?.touched"> Campo requerido
+                                </div>
+                                <label for="amount" >Cantidad a añadir</label>
+                            </div>
+                            </div>
+                              
+                          </div>
+                      </fieldset>
+                    </form>
+                  </ng-container>
+                  <ng-container *ngIf="modalSuplementMode === 2">
+                    <p class="text-primary">
+                      Está seguro que desea eliminar el suplemento {{suplementoPosition}}?
+                    </p>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="row" style="margin-top: 20px;">
+                <div class="col-md-12" style="text-align: right;">
+                  <ng-container *ngIf="modalSuplementMode === 1">
+                    <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal"
+                   (click)="editSuplement()" [disabled]="!suplementForm.valid" >Editar</button>
+                  </ng-container>
+                  <ng-container *ngIf="modalSuplementMode === 2">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal"
+                    (click)="deleteSuplement()" >Eliminar</button>
+                  </ng-container>
+                  <button type="button" class="btn btn-dark btn-sm" data-bs-dismiss="modal"
+                  style="margin-left: 5px;"
+                  (click)="cleanAmount()">Cancelar</button>
+                </div>
+              </div>
+              
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+
+  <!-- modal Eliminar Contrato -->
   <div class="modal"  id="modalDeleteContract">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -604,6 +920,9 @@
       </div>
     </div>
   </div>
+
+
+
 
 
 

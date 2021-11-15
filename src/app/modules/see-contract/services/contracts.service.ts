@@ -22,6 +22,11 @@ export class ContractsService {
     return this.httpClient.get<Contract[]>(`${this.apiUrl}/contracts/all`);
   }  
 
+
+  getAllContractByUser(userId: number): Observable<Contract[]> {
+    return this.httpClient.get<Contract[]>(`${this.apiUrl}/contracts/all/${userId}`);
+  }  
+
   editContract(contract: Contract){
     let id = contract.id;
     return this.httpClient.put(`${this.apiUrl}/contracts/update/${id}`,contract);
@@ -35,4 +40,14 @@ export class ContractsService {
   addSuplement(newSuplement: Suplement){
     return this.httpClient.post(`${this.apiUrl}/sumplements/create`,newSuplement);
   }
-}
+
+  editSuplement(editSuplement: Suplement){
+    return this.httpClient.put(`${this.apiUrl}/sumplements/update/${editSuplement.id}`,editSuplement);
+  }
+
+  deleteSuplement(suplementId: number){
+    return this.httpClient.delete(`${this.apiUrl}/sumplements/delete/${suplementId}`);
+  }
+
+  }
+

@@ -28,6 +28,7 @@ export class AtachedComponent implements OnInit {
     autoClose: true,
     keepAfterRouteChange: false
   };
+  impresContrato = '';
  
 
   constructor(private atachedService: AtachedService,  private fb: FormBuilder,
@@ -106,11 +107,12 @@ export class AtachedComponent implements OnInit {
 
    modalMode(item?: Contract){
   
-        this.modalTitle = 'Adjuntar Foto de Contrato';
+        this.modalTitle = 'Adjuntar foto de contrato';
         this.actionMode = 1
         this.currentContract = item;
         if (this.currentContract.contractAttached) {
           this.imageSrc = this.linkImg();
+          this.impresContrato = this.imageSrc;
         } else {
           this.imageSrc = "assets/images/+imagen.png";
         }
