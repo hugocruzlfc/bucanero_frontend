@@ -25,6 +25,18 @@
               </div>
               <div class="col-md-7">
                 <ng-container *ngIf="ruta == 'meses'">
+                  <div class="row ">
+                    <div class="form-group" style="text-align: center; padding-left: 12em; padding-right: 12em; ">
+                      <label for="exampleSelect1" class="form-label">Años</label>
+                      <select class="form-select" id="exampleSelect1"
+                      (click) = "refreshGetContractByYear()"  [(ngModel)]="actualYear">
+                        <!-- <option  [value]="actualYear" >{{arrayOfYears[0]}}</option> -->
+                        <option [value] = "years" *ngFor="let years of arrayOfYears" >
+                          {{years}}
+                          </option>
+                      </select>
+                    </div>
+                  </div>
                   <div style="display: block;">
                     <canvas baseChart 
                       [datasets]="barChartDataContract"

@@ -15,6 +15,8 @@ import { GraphicsService } from './services/graphics.service';
 export class GraphicsComponent implements OnInit {
 
   contracts$ = this.graphicsService.contracts;
+  actualYear: any;
+  arrayOfYears: number[]= [];
   public barChartOptions: ChartOptions = {
     responsive: true,
   };
@@ -43,10 +45,12 @@ export class GraphicsComponent implements OnInit {
   ];
   ruta: string = 'meses';
 
-  constructor(private graphicsService: GraphicsService, private _location: Location) { }
+  constructor(private graphicsService: GraphicsService, private _location: Location) { 
+    this.getCurrentYear();
+  }
 
   ngOnInit(): void {
-    this.getContractByMonth();
+    this.getContractByYear();
     this.getTotalValueByContract();
     this.getExpiredByContract();
   }
@@ -71,16 +75,24 @@ export class GraphicsComponent implements OnInit {
 
 
 
-getContractByMonth(){
+getContractByYear(){
   this.contracts$.subscribe(contracts =>{
     let contractByMont = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let value of contracts) {
-          let actualIncident: any = value;
-          let mont =  new Date(actualIncident.createdAt).getMonth();
+      let actualContracts: any = value;
+      let yearContract = new Date(actualContracts.signatureDate).getFullYear();
+      if ((this.actualYear == yearContract) && (actualContracts.estate ==='Ejecución')){
+        let mont =  new Date(actualContracts.signatureDate).getMonth();
           contractByMont[mont]++
           this.barChartDataContract[0].data = contractByMont;
+      } 
+          
         }
   })
+}
+
+refreshGetContractByYear(){
+  this.getContractByYear();
 }
 
 getTotalValueByContract(){
@@ -88,7 +100,10 @@ getTotalValueByContract(){
   this.contracts$.subscribe(contracts =>{
     this.barChartLabelsTotalValue[0] ='Cantidad de Contratos:' + contracts.length.toString();
     for (let value of contracts) {
-       count += value.totalValue;
+      if (value.estate === 'Ejecución') {
+        count += value.totalValue;
+      }
+       
       }
      this.barChartDataTotalValue[0].data?.push(count);
   })
@@ -109,7 +124,25 @@ getExpiredByContract(){
   })
 }
 
-
+getCurrentYear(){
+  let actualDay = Date.now();
+  let today = new Date(actualDay);
+  this.actualYear =  today.getFullYear();
+  this.arrayOfYears.push( this.actualYear);
+  this.contracts$.subscribe(contracts =>{
+    for (let value of contracts) {
+       let currentDay = 0;
+         if (value.estate === 'Ejecución') {
+          let fechaBd = value.signatureDate;
+          let fechaBdFormat = new Date(fechaBd);
+          let yearOfContract = fechaBdFormat.getFullYear();
+          if ( !this.arrayOfYears.includes(yearOfContract)) {
+            this.arrayOfYears.push(yearOfContract);
+          }
+         } 
+      }
+  })
+}
 
 
   backClicked() {
