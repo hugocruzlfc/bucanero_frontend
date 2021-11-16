@@ -156,7 +156,7 @@
                         <div class="col-md-6">
                           <div class="form-floating" style="margin-top: 10px;">
                             <ng-container *ngIf="actionMode !=3">
-                            <input [ngClass]="{
+                            <input  [ngClass]="{
                               'is-invalid':
                               userForm.get('dni')?.errors &&
                               userForm.get('dni')?.touched,
@@ -175,9 +175,8 @@
                       Campo requerido
                   </div>
                   <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
-                  ( ( userForm.get('dni')?.hasError('min') &&
-                    userForm.get('dni')?.touched ) || ( userForm.get('dni')?.hasError('max') &&
-                    userForm.get('dni')?.touched ))
+                   ( userForm.get('dni')?.hasError('pattern') &&
+                    userForm.get('dni')?.touched )
                       "
                       >
                       El número de CI tiene 11 digitos
@@ -187,7 +186,7 @@
                             <input type="number" class="form-control" id="dni" name="dni"  readonly=""
                             formControlName="dni"  placeholder="11111111111">
                           </ng-container>
-                            <label for="dni">No. Carné Identidad </label>
+                            <label for="dni">No. carné identidad </label>
                           </div>
                         </div>
                         <div class="col-md-6">
@@ -213,9 +212,8 @@
                         Campo requerido
                     </div>
                     <div class="invalid-feedback colorMessageErrors text-center" *ngIf="
-                  ( ( userForm.get('celular')?.hasError('min') &&
-                    userForm.get('celular')?.touched ) || ( userForm.get('celular')?.hasError('max') &&
-                    userForm.get('celular')?.touched ))
+                   ( userForm.get('celular')?.hasError('pattern') &&
+                    userForm.get('celular')?.touched )
                       "
                       >
                       El número de celular tiene 8 digitos
@@ -226,7 +224,7 @@
                             placeholder="55555555"    readonly=""
                             formControlName="celular" autocomplete="off">
                           </ng-container>
-                            <label for="celular">No. Celular </label>
+                            <label for="celular">No. celular </label>
                           </div>
                         </div>
                       </div>

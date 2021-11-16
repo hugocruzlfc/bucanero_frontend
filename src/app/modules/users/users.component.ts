@@ -27,6 +27,8 @@ export class UsersComponent implements OnInit {
   userForm: FormGroup;
   private isEmail = /\S+@\S+\.\S+/;
   private passwordSize = /[a-zA-z0-9]{6,16}/i;
+  private celularLenght = /^([0-9]){8,8}$/;
+  private dniLenght = /^([0-9]){11,11}$/;
   actionMode: number = 1;
   currenUser: any;
   options = {
@@ -40,8 +42,8 @@ export class UsersComponent implements OnInit {
     this.userForm = this.fb.group({
       name: ['', [Validators.required]],
       address: ['', [Validators.required]],
-      dni: [null, [Validators.required, Validators.min(11), Validators.max(11)]],
-      celular: [null, [Validators.required, Validators.min(8), Validators.max(8)]],
+      dni: [null, [Validators.required, Validators.pattern(this.dniLenght)]],
+      celular: ['', [Validators.required, Validators.pattern(this.celularLenght)]],
       role: ['', [Validators.required]],
       email: ['', [Validators.required,Validators.pattern(this.isEmail)]],
       password: ['', [Validators.required, Validators.pattern(this.passwordSize)]],
@@ -108,8 +110,7 @@ export class UsersComponent implements OnInit {
  
   async workerUser(){
      if (this.actionMode == 1) {
-        var newUser: User;
-        newUser = this.userForm.value;
+        let newUser: User = this.userForm.value;
         this.userService.addNewUser(newUser).subscribe(data =>{
           this.getUsers();
           this.notificationService.success('Usuario creado correctamente',this.options);
